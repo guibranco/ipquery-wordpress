@@ -107,6 +107,16 @@ mermaid:
   version: "10.9.0"
 
 # ----------------------------------------------------------------------
+#  Front-matter defaults — apply Just the Docs layout to every page
+# ----------------------------------------------------------------------
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default
+
+# ----------------------------------------------------------------------
 #  Jekyll build settings
 # ----------------------------------------------------------------------
 markdown: kramdown
