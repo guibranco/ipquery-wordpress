@@ -35,7 +35,7 @@ No Composer or external package manager is needed. The [ipquery-php](https://git
    git clone https://github.com/guibranco/ipquery-wordpress.git
    ```
 2. Copy the `ipquery-wordpress` folder into your `wp-content/plugins/` directory.
-3. In your WordPress admin, go to **Plugins** and activate **IpQuery for WordPress**.
+3. In your WordPress admin, go to **Plugins** and activate **IpQuery**.
 
 ---
 
@@ -44,8 +44,8 @@ No Composer or external package manager is needed. The [ipquery-php](https://git
 When you activate the plugin, it:
 
 1. Creates the `wp_ipquery_visitors` database table (prefixed with your `$table_prefix`).
-2. Writes default settings to the `ipquery_wp_settings` option.
-3. Schedules a daily WP-Cron event (`ipquery_wp_daily_cleanup`) for automatic data retention.
+2. Writes default settings to the `ipquery_settings` option.
+3. Schedules a daily WP-Cron event (`ipquery_daily_cleanup`) for automatic data retention.
 
 No changes are made to existing WordPress tables.
 
