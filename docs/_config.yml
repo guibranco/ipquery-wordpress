@@ -70,8 +70,8 @@ enable_copy_code_button: true
 # ----------------------------------------------------------------------
 footer_content: >-
   &copy; 2026 <a href="https://guilherme.stracini.com.br">Guilherme Branco Stracini</a>.
-  IpQuery for WordPress is open source under the
-  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">GPL-2.0-or-later license</a>.
+  IpQuery is open source under the
+  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">MIT license</a>.
   Built with <a href="https://just-the-docs.com">Just the Docs</a>.
   Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>
   and the <a href="https://ipquery.io" target="_blank">IpQuery API</a>.
