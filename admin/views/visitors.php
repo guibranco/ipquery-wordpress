@@ -3,20 +3,20 @@
 <div class="wrap ipquery-wrap">
     <h1 class="wp-heading-inline">
         <span class="dashicons dashicons-admin-users"></span>
-        <?php esc_html_e( 'IpQuery — Visitors', 'ipquery-wp' ); ?>
+        <?php esc_html_e( 'IpQuery — Visitors', 'ipquery' ); ?>
     </h1>
     <hr class="wp-header-end">
 
     <?php
     // Admin notices.
     if ( isset( $_GET['deleted'] ) ) :
-        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'IP deleted.', 'ipquery-wp' ) . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'IP deleted.', 'ipquery' ) . '</p></div>';
     elseif ( isset( $_GET['purged'] ) ) :
-        printf( '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '%d old records removed.', 'ipquery-wp' ) . '</p></div>', (int) $_GET['purged'] );
+        printf( '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '%d old records removed.', 'ipquery' ) . '</p></div>', (int) $_GET['purged'] );
     elseif ( isset( $_GET['lookup_ok'] ) ) :
-        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'IP looked up and stored.', 'ipquery-wp' ) . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'IP looked up and stored.', 'ipquery' ) . '</p></div>';
     elseif ( isset( $_GET['lookup_error'] ) ) :
-        echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( sprintf( __( 'Lookup error: %s', 'ipquery-wp' ), urldecode( sanitize_text_field( $_GET['lookup_error'] ) ) ) ) . '</p></div>';
+        echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( sprintf( __( 'Lookup error: %s', 'ipquery' ), urldecode( sanitize_text_field( $_GET['lookup_error'] ) ) ) ) . '</p></div>';
     endif;
     ?>
 
@@ -28,21 +28,21 @@
             <input type="search"
                    name="s"
                    value="<?php echo esc_attr( sanitize_text_field( $_GET['s'] ?? '' ) ); ?>"
-                   placeholder="<?php esc_attr_e( 'Search IP, city, country, ISP…', 'ipquery-wp' ); ?>"
+                   placeholder="<?php esc_attr_e( 'Search IP, city, country, ISP…', 'ipquery' ); ?>"
                    class="regular-text">
 
             <select name="risk_filter">
-                <option value=""><?php esc_html_e( 'All types', 'ipquery-wp' ); ?></option>
-                <option value="is_vpn"        <?php selected( $_GET['risk_filter'] ?? '', 'is_vpn' ); ?>><?php esc_html_e( 'VPN', 'ipquery-wp' ); ?></option>
-                <option value="is_proxy"      <?php selected( $_GET['risk_filter'] ?? '', 'is_proxy' ); ?>><?php esc_html_e( 'Proxy', 'ipquery-wp' ); ?></option>
-                <option value="is_tor"        <?php selected( $_GET['risk_filter'] ?? '', 'is_tor' ); ?>><?php esc_html_e( 'Tor', 'ipquery-wp' ); ?></option>
-                <option value="is_datacenter" <?php selected( $_GET['risk_filter'] ?? '', 'is_datacenter' ); ?>><?php esc_html_e( 'Datacenter', 'ipquery-wp' ); ?></option>
-                <option value="is_mobile"     <?php selected( $_GET['risk_filter'] ?? '', 'is_mobile' ); ?>><?php esc_html_e( 'Mobile', 'ipquery-wp' ); ?></option>
+                <option value=""><?php esc_html_e( 'All types', 'ipquery' ); ?></option>
+                <option value="is_vpn"        <?php selected( $_GET['risk_filter'] ?? '', 'is_vpn' ); ?>><?php esc_html_e( 'VPN', 'ipquery' ); ?></option>
+                <option value="is_proxy"      <?php selected( $_GET['risk_filter'] ?? '', 'is_proxy' ); ?>><?php esc_html_e( 'Proxy', 'ipquery' ); ?></option>
+                <option value="is_tor"        <?php selected( $_GET['risk_filter'] ?? '', 'is_tor' ); ?>><?php esc_html_e( 'Tor', 'ipquery' ); ?></option>
+                <option value="is_datacenter" <?php selected( $_GET['risk_filter'] ?? '', 'is_datacenter' ); ?>><?php esc_html_e( 'Datacenter', 'ipquery' ); ?></option>
+                <option value="is_mobile"     <?php selected( $_GET['risk_filter'] ?? '', 'is_mobile' ); ?>><?php esc_html_e( 'Mobile', 'ipquery' ); ?></option>
             </select>
 
-            <?php submit_button( __( 'Filter', 'ipquery-wp' ), 'secondary', 'filter', false ); ?>
+            <?php submit_button( __( 'Filter', 'ipquery' ), 'secondary', 'filter', false ); ?>
             <?php if ( ! empty( $_GET['s'] ) || ! empty( $_GET['risk_filter'] ) ) : ?>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=ipquery-visitors' ) ); ?>" class="button"><?php esc_html_e( 'Reset', 'ipquery-wp' ); ?></a>
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=ipquery-visitors' ) ); ?>" class="button"><?php esc_html_e( 'Reset', 'ipquery' ); ?></a>
             <?php endif; ?>
         </form>
 
@@ -50,8 +50,8 @@
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="ipquery-lookup-form">
             <?php wp_nonce_field( 'ipquery_manual_lookup' ); ?>
             <input type="hidden" name="action" value="ipquery_lookup">
-            <input type="text" name="ip" placeholder="<?php esc_attr_e( 'Lookup IP…', 'ipquery-wp' ); ?>" class="regular-text" pattern="^(\d{1,3}\.){3}\d{1,3}$|^[0-9a-fA-F:]+$">
-            <?php submit_button( __( 'Lookup', 'ipquery-wp' ), 'secondary', 'lookup_btn', false ); ?>
+            <input type="text" name="ip" placeholder="<?php esc_attr_e( 'Lookup IP…', 'ipquery' ); ?>" class="regular-text" pattern="^(\d{1,3}\.){3}\d{1,3}$|^[0-9a-fA-F:]+$">
+            <?php submit_button( __( 'Lookup', 'ipquery' ), 'secondary', 'lookup_btn', false ); ?>
         </form>
     </div>
 
@@ -85,7 +85,7 @@
 
     <p class="ipquery-count">
         <?php printf(
-            esc_html( _n( '%s record found.', '%s records found.', $total, 'ipquery-wp' ) ),
+            esc_html( _n( '%s record found.', '%s records found.', $total, 'ipquery' ) ),
             '<strong>' . esc_html( number_format_i18n( $total ) ) . '</strong>'
         ); ?>
     </p>
@@ -93,20 +93,20 @@
     <table class="widefat striped ipquery-visitors-table">
         <thead>
             <tr>
-                <th><?php echo ipquery_sortable_col( 'ip',          __( 'IP Address',  'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php echo ipquery_sortable_col( 'country',     __( 'Location',    'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php esc_html_e( 'ISP', 'ipquery-wp' ); ?></th>
-                <th><?php esc_html_e( 'Risk Flags', 'ipquery-wp' ); ?></th>
-                <th><?php echo ipquery_sortable_col( 'risk_score',  __( 'Score',       'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php echo ipquery_sortable_col( 'visit_count', __( 'Visits',      'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php echo ipquery_sortable_col( 'first_seen',  __( 'First Seen',  'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php echo ipquery_sortable_col( 'last_seen',   __( 'Last Seen',   'ipquery-wp' ), $orderby, $order ); ?></th>
-                <th><?php esc_html_e( 'Actions', 'ipquery-wp' ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'ip',          __( 'IP Address',  'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'country',     __( 'Location',    'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php esc_html_e( 'ISP', 'ipquery' ); ?></th>
+                <th><?php esc_html_e( 'Risk Flags', 'ipquery' ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'risk_score',  __( 'Score',       'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'visit_count', __( 'Visits',      'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'first_seen',  __( 'First Seen',  'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php echo ipquery_sortable_col( 'last_seen',   __( 'Last Seen',   'ipquery' ), $orderby, $order ); ?></th>
+                <th><?php esc_html_e( 'Actions', 'ipquery' ); ?></th>
             </tr>
         </thead>
         <tbody>
         <?php if ( empty( $rows ) ) : ?>
-            <tr><td colspan="9"><?php esc_html_e( 'No records found.', 'ipquery-wp' ); ?></td></tr>
+            <tr><td colspan="9"><?php esc_html_e( 'No records found.', 'ipquery' ); ?></td></tr>
         <?php else : ?>
             <?php foreach ( $rows as $row ) :
                 $flags = [];
@@ -143,8 +143,8 @@
                         <input type="hidden" name="action" value="ipquery_delete_ip">
                         <input type="hidden" name="ip" value="<?php echo esc_attr( $row['ip'] ); ?>">
                         <button type="submit" class="button button-small button-link-delete"
-                                onclick="return confirm('<?php echo esc_js( __( 'Delete this IP record?', 'ipquery-wp' ) ); ?>')">
-                            <?php esc_html_e( 'Delete', 'ipquery-wp' ); ?>
+                                onclick="return confirm('<?php echo esc_js( __( 'Delete this IP record?', 'ipquery' ) ); ?>')">
+                            <?php esc_html_e( 'Delete', 'ipquery' ); ?>
                         </button>
                     </form>
                 </td>
@@ -173,15 +173,15 @@
 
     <!-- Purge old records -->
     <div class="ipquery-panel" style="margin-top:24px;">
-        <h3><?php esc_html_e( 'Purge Old Records', 'ipquery-wp' ); ?></h3>
+        <h3><?php esc_html_e( 'Purge Old Records', 'ipquery' ); ?></h3>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <?php wp_nonce_field( 'ipquery_purge' ); ?>
             <input type="hidden" name="action" value="ipquery_purge">
             <label>
-                <?php esc_html_e( 'Delete records older than', 'ipquery-wp' ); ?>
-                <input type="number" name="days" value="90" min="1" max="3650" style="width:70px;"> <?php esc_html_e( 'days', 'ipquery-wp' ); ?>
+                <?php esc_html_e( 'Delete records older than', 'ipquery' ); ?>
+                <input type="number" name="days" value="90" min="1" max="3650" style="width:70px;"> <?php esc_html_e( 'days', 'ipquery' ); ?>
             </label>
-            <?php submit_button( __( 'Purge', 'ipquery-wp' ), 'secondary', 'purge_btn', false ); ?>
+            <?php submit_button( __( 'Purge', 'ipquery' ), 'secondary', 'purge_btn', false ); ?>
         </form>
     </div>
 

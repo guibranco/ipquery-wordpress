@@ -18,16 +18,16 @@ class IpQuery_Admin {
         add_action( 'wp_ajax_ipquery_heatmap_data',   [ self::class, 'ajax_heatmap_data' ] );
 
         // Daily cleanup cron.
-        if ( ! wp_next_scheduled( 'ipquery_wp_daily_cleanup' ) ) {
-            wp_schedule_event( time(), 'daily', 'ipquery_wp_daily_cleanup' );
+        if ( ! wp_next_scheduled( 'ipquery_daily_cleanup' ) ) {
+            wp_schedule_event( time(), 'daily', 'ipquery_daily_cleanup' );
         }
-        add_action( 'ipquery_wp_daily_cleanup', [ self::class, 'run_cleanup' ] );
+        add_action( 'ipquery_daily_cleanup', [ self::class, 'run_cleanup' ] );
     }
 
     public static function register_menu(): void {
         add_menu_page(
-            __( 'IpQuery', 'ipquery-wp' ),
-            __( 'IpQuery', 'ipquery-wp' ),
+            __( 'IpQuery', 'ipquery' ),
+            __( 'IpQuery', 'ipquery' ),
             'manage_options',
             'ipquery-dashboard',
             [ self::class, 'page_dashboard' ],
@@ -36,24 +36,24 @@ class IpQuery_Admin {
         );
         add_submenu_page(
             'ipquery-dashboard',
-            __( 'Dashboard', 'ipquery-wp' ),
-            __( 'Dashboard', 'ipquery-wp' ),
+            __( 'Dashboard', 'ipquery' ),
+            __( 'Dashboard', 'ipquery' ),
             'manage_options',
             'ipquery-dashboard',
             [ self::class, 'page_dashboard' ]
         );
         add_submenu_page(
             'ipquery-dashboard',
-            __( 'Visitors', 'ipquery-wp' ),
-            __( 'Visitors', 'ipquery-wp' ),
+            __( 'Visitors', 'ipquery' ),
+            __( 'Visitors', 'ipquery' ),
             'manage_options',
             'ipquery-visitors',
             [ self::class, 'page_visitors' ]
         );
         add_submenu_page(
             'ipquery-dashboard',
-            __( 'Settings', 'ipquery-wp' ),
-            __( 'Settings', 'ipquery-wp' ),
+            __( 'Settings', 'ipquery' ),
+            __( 'Settings', 'ipquery' ),
             'manage_options',
             'ipquery-settings',
             [ self::class, 'page_settings' ]
@@ -74,9 +74,9 @@ class IpQuery_Admin {
         wp_enqueue_script( 'chartjs', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js', [], '4.4.3', true );
 
         // Plugin assets
-        wp_enqueue_style(  'ipquery-admin', IPQUERY_WP_URL . 'assets/css/admin.css', [], IPQUERY_WP_VERSION );
-        wp_enqueue_script( 'ipquery-maps',  IPQUERY_WP_URL . 'assets/js/ipquery-maps.js',   [ 'leaflet', 'leaflet-heat', 'jquery' ], IPQUERY_WP_VERSION, true );
-        wp_enqueue_script( 'ipquery-charts',IPQUERY_WP_URL . 'assets/js/ipquery-charts.js', [ 'chartjs', 'jquery' ],                 IPQUERY_WP_VERSION, true );
+        wp_enqueue_style(  'ipquery-admin', IPQUERY_URL . 'assets/css/admin.css', [], IPQUERY_VERSION );
+        wp_enqueue_script( 'ipquery-maps',  IPQUERY_URL . 'assets/js/ipquery-maps.js',   [ 'leaflet', 'leaflet-heat', 'jquery' ], IPQUERY_VERSION, true );
+        wp_enqueue_script( 'ipquery-charts',IPQUERY_URL . 'assets/js/ipquery-charts.js', [ 'chartjs', 'jquery' ],                 IPQUERY_VERSION, true );
 
         wp_localize_script( 'ipquery-maps', 'IpQueryData', [
             'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
@@ -92,23 +92,23 @@ class IpQuery_Admin {
 
     public static function page_dashboard(): void {
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
-        include IPQUERY_WP_DIR . 'admin/views/dashboard.php';
+        include IPQUERY_DIR . 'admin/views/dashboard.php';
     }
 
     public static function page_visitors(): void {
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
-        include IPQUERY_WP_DIR . 'admin/views/visitors.php';
+        include IPQUERY_DIR . 'admin/views/visitors.php';
     }
 
     public static function page_settings(): void {
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
-        include IPQUERY_WP_DIR . 'admin/views/settings.php';
+        include IPQUERY_DIR . 'admin/views/settings.php';
     }
 
     // -------------------------------------------------------------------------
@@ -126,7 +126,7 @@ class IpQuery_Admin {
             return;
         }
 
-        update_option( 'ipquery_wp_settings', [
+        update_option( 'ipquery_settings', [
             'tracking_enabled'   => ! empty( $_POST['tracking_enabled'] ),
             'track_logged_in'    => ! empty( $_POST['track_logged_in'] ),
             'track_admins'       => ! empty( $_POST['track_admins'] ),
@@ -136,7 +136,7 @@ class IpQuery_Admin {
         ] );
 
         add_action( 'admin_notices', static function () {
-            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'ipquery-wp' ) . '</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Settings saved.', 'ipquery' ) . '</p></div>';
         } );
     }
 
@@ -147,7 +147,7 @@ class IpQuery_Admin {
     public static function handle_delete_ip(): void {
         check_admin_referer( 'ipquery_delete_ip' );
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
         $ip = sanitize_text_field( wp_unslash( $_POST['ip'] ?? '' ) );
         if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
@@ -160,7 +160,7 @@ class IpQuery_Admin {
     public static function handle_purge(): void {
         check_admin_referer( 'ipquery_purge' );
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
         $days = max( 1, (int) ( $_POST['days'] ?? 90 ) );
         $deleted = IpQuery_DB::delete_old_records( $days );
@@ -171,7 +171,7 @@ class IpQuery_Admin {
     public static function handle_manual_lookup(): void {
         check_admin_referer( 'ipquery_manual_lookup' );
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( esc_html__( 'Not allowed.', 'ipquery-wp' ) );
+            wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
         }
         $ip = sanitize_text_field( wp_unslash( $_POST['ip'] ?? '' ) );
         if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
@@ -234,7 +234,7 @@ class IpQuery_Admin {
     }
 
     public static function run_cleanup(): void {
-        $settings     = get_option( 'ipquery_wp_settings', [] );
+        $settings     = get_option( 'ipquery_settings', [] );
         $days         = (int) ( $settings['retention_days'] ?? 90 );
         IpQuery_DB::delete_old_records( $days );
     }

@@ -3,7 +3,7 @@
 <div class="wrap ipquery-wrap">
     <h1 class="wp-heading-inline">
         <span class="dashicons dashicons-location-alt"></span>
-        <?php esc_html_e( 'IpQuery — Dashboard', 'ipquery-wp' ); ?>
+        <?php esc_html_e( 'IpQuery — Dashboard', 'ipquery' ); ?>
     </h1>
     <hr class="wp-header-end">
 
@@ -21,21 +21,21 @@
             <div class="ipquery-card__icon dashicons dashicons-admin-users"></div>
             <div class="ipquery-card__body">
                 <span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $total_visits ) ); ?></span>
-                <span class="ipquery-card__label"><?php esc_html_e( 'Total Visits', 'ipquery-wp' ); ?></span>
+                <span class="ipquery-card__label"><?php esc_html_e( 'Total Visits', 'ipquery' ); ?></span>
             </div>
         </div>
         <div class="ipquery-card ipquery-card--green">
             <div class="ipquery-card__icon dashicons dashicons-networking"></div>
             <div class="ipquery-card__body">
                 <span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $unique_ips ) ); ?></span>
-                <span class="ipquery-card__label"><?php esc_html_e( 'Unique IPs', 'ipquery-wp' ); ?></span>
+                <span class="ipquery-card__label"><?php esc_html_e( 'Unique IPs', 'ipquery' ); ?></span>
             </div>
         </div>
         <div class="ipquery-card ipquery-card--orange">
             <div class="ipquery-card__icon dashicons dashicons-shield-alt"></div>
             <div class="ipquery-card__body">
                 <span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $risk_counts['vpn'] + $risk_counts['proxy'] + $risk_counts['tor'] ) ); ?></span>
-                <span class="ipquery-card__label"><?php esc_html_e( 'VPN / Proxy / Tor', 'ipquery-wp' ); ?></span>
+                <span class="ipquery-card__label"><?php esc_html_e( 'VPN / Proxy / Tor', 'ipquery' ); ?></span>
             </div>
         </div>
         <div class="ipquery-card ipquery-card--red">
@@ -47,7 +47,7 @@
                     : 0;
                 ?>
                 <span class="ipquery-card__value"><?php echo esc_html( $risky_pct ); ?>%</span>
-                <span class="ipquery-card__label"><?php esc_html_e( 'Risk Rate', 'ipquery-wp' ); ?></span>
+                <span class="ipquery-card__label"><?php esc_html_e( 'Risk Rate', 'ipquery' ); ?></span>
             </div>
         </div>
     </div>
@@ -57,13 +57,13 @@
 
         <!-- World heatmap -->
         <div class="ipquery-panel ipquery-panel--wide">
-            <h2><?php esc_html_e( 'Visitor Heatmap', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Visitor Heatmap', 'ipquery' ); ?></h2>
             <div id="ipquery-map" style="height:420px;"></div>
         </div>
 
         <!-- Country chart -->
         <div class="ipquery-panel ipquery-panel--narrow">
-            <h2><?php esc_html_e( 'Top Countries', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Top Countries', 'ipquery' ); ?></h2>
             <div class="ipquery-chart-wrap" style="position:relative;height:390px;overflow:hidden;">
                 <canvas id="ipquery-country-chart"></canvas>
             </div>
@@ -75,7 +75,7 @@
     <div class="ipquery-row">
 
         <div class="ipquery-panel ipquery-panel--half">
-            <h2><?php esc_html_e( 'Risk Breakdown', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Risk Breakdown', 'ipquery' ); ?></h2>
             <div class="ipquery-chart-wrap" style="position:relative;height:260px;overflow:hidden;">
                 <canvas id="ipquery-risk-chart"></canvas>
             </div>
@@ -83,18 +83,18 @@
 
         <!-- Country table -->
         <div class="ipquery-panel ipquery-panel--half">
-            <h2><?php esc_html_e( 'Top Countries', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Top Countries', 'ipquery' ); ?></h2>
             <table class="widefat striped ipquery-table">
                 <thead>
                     <tr>
-                        <th><?php esc_html_e( 'Country', 'ipquery-wp' ); ?></th>
-                        <th><?php esc_html_e( 'Visits', 'ipquery-wp' ); ?></th>
-                        <th><?php esc_html_e( '%', 'ipquery-wp' ); ?></th>
+                        <th><?php esc_html_e( 'Country', 'ipquery' ); ?></th>
+                        <th><?php esc_html_e( 'Visits', 'ipquery' ); ?></th>
+                        <th><?php esc_html_e( '%', 'ipquery' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php if ( empty( $top_countries ) ) : ?>
-                    <tr><td colspan="3"><?php esc_html_e( 'No data yet.', 'ipquery-wp' ); ?></td></tr>
+                    <tr><td colspan="3"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
                 <?php else : ?>
                     <?php foreach ( $top_countries as $row ) : ?>
                     <tr>
@@ -121,19 +121,19 @@
     <!-- Cities table -->
     <div class="ipquery-row">
         <div class="ipquery-panel ipquery-panel--half">
-            <h2><?php esc_html_e( 'Top Cities', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Top Cities', 'ipquery' ); ?></h2>
             <table class="widefat striped ipquery-table">
                 <thead>
                     <tr>
-                        <th><?php esc_html_e( 'City', 'ipquery-wp' ); ?></th>
-                        <th><?php esc_html_e( 'Country', 'ipquery-wp' ); ?></th>
-                        <th><?php esc_html_e( 'Visits', 'ipquery-wp' ); ?></th>
-                        <th><?php esc_html_e( '%', 'ipquery-wp' ); ?></th>
+                        <th><?php esc_html_e( 'City', 'ipquery' ); ?></th>
+                        <th><?php esc_html_e( 'Country', 'ipquery' ); ?></th>
+                        <th><?php esc_html_e( 'Visits', 'ipquery' ); ?></th>
+                        <th><?php esc_html_e( '%', 'ipquery' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php if ( empty( $top_cities ) ) : ?>
-                    <tr><td colspan="4"><?php esc_html_e( 'No data yet.', 'ipquery-wp' ); ?></td></tr>
+                    <tr><td colspan="4"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
                 <?php else : ?>
                     <?php foreach ( $top_cities as $row ) : ?>
                     <tr>
@@ -160,15 +160,15 @@
     <!-- Risk detail cards -->
     <div class="ipquery-row">
         <div class="ipquery-panel">
-            <h2><?php esc_html_e( 'Risk Details', 'ipquery-wp' ); ?></h2>
+            <h2><?php esc_html_e( 'Risk Details', 'ipquery' ); ?></h2>
             <div class="ipquery-risk-grid">
                 <?php
                 $risk_items = [
-                    [ 'label' => __( 'VPN',        'ipquery-wp' ), 'count' => $risk_counts['vpn'],        'icon' => 'lock',         'class' => 'orange' ],
-                    [ 'label' => __( 'Proxy',      'ipquery-wp' ), 'count' => $risk_counts['proxy'],      'icon' => 'update',       'class' => 'red'    ],
-                    [ 'label' => __( 'Tor',        'ipquery-wp' ), 'count' => $risk_counts['tor'],        'icon' => 'hidden',       'class' => 'red'    ],
-                    [ 'label' => __( 'Datacenter', 'ipquery-wp' ), 'count' => $risk_counts['datacenter'], 'icon' => 'cloud',        'class' => 'blue'   ],
-                    [ 'label' => __( 'Mobile',     'ipquery-wp' ), 'count' => $risk_counts['mobile'],     'icon' => 'smartphone',   'class' => 'green'  ],
+                    [ 'label' => __( 'VPN',        'ipquery' ), 'count' => $risk_counts['vpn'],        'icon' => 'lock',         'class' => 'orange' ],
+                    [ 'label' => __( 'Proxy',      'ipquery' ), 'count' => $risk_counts['proxy'],      'icon' => 'update',       'class' => 'red'    ],
+                    [ 'label' => __( 'Tor',        'ipquery' ), 'count' => $risk_counts['tor'],        'icon' => 'hidden',       'class' => 'red'    ],
+                    [ 'label' => __( 'Datacenter', 'ipquery' ), 'count' => $risk_counts['datacenter'], 'icon' => 'cloud',        'class' => 'blue'   ],
+                    [ 'label' => __( 'Mobile',     'ipquery' ), 'count' => $risk_counts['mobile'],     'icon' => 'smartphone',   'class' => 'green'  ],
                 ];
                 foreach ( $risk_items as $item ) : ?>
                 <div class="ipquery-risk-item ipquery-risk-item--<?php echo esc_attr( $item['class'] ); ?>">
