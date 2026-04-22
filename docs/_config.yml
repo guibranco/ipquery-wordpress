@@ -1,45 +1,103 @@
-title: IpQuery for WordPress
+# ======================================================================
+#  IpQuery Wordpress Plugin documentation site — Jekyll + just-the-docs
+#  Lives at: /docs (in the ipquery-wordpress repo)
+#  Serves from: https://guilherme.stracini.com.br/ipquery-wordpress/
+# ======================================================================
+
+title: IpQuery
 description: >-
   Track and analyse visitor IP data using the IpQuery API.
   Displays location maps, traffic heatmaps, and VPN/proxy statistics.
+remote_theme: just-the-docs/just-the-docs@v0.12.0
 
-url: "https://guilherme.stracini.com.br"
-baseurl: "/ipquery-wordpress"
+url: https://guilherme.stracini.com.br
+baseurl: /ipquery-wordpress
 
-remote_theme: just-the-docs/just-the-docs@v0.10.0
+# Favicon & logo (drop the files in docs/assets/images/)
+favicon_ico: /assets/images/favicon.ico
+# logo: /assets/images/logo.png
 
-# ── Navigation ────────────────────────────────────────────────────────────────
+# ----------------------------------------------------------------------
+#  Search
+# ----------------------------------------------------------------------
 search_enabled: true
-heading_anchors: true
-permalink: pretty
+search:
+  heading_level: 3
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s\-/]+/
+  rel_url: true
+  button: false
 
-# ── Header links ─────────────────────────────────────────────────────────────
+# ----------------------------------------------------------------------
+#  Navigation & layout
+# ----------------------------------------------------------------------
+nav_enabled: true
+heading_anchors: true
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# External links shown in the top-right of every page
 aux_links:
   "GitHub":
     - "https://github.com/guibranco/ipquery-wordpress"
   "IpQuery API":
     - "https://ipquery.io"
-
 aux_links_new_tab: true
 
-# ── Footer ────────────────────────────────────────────────────────────────────
-footer_content: >-
-  IpQuery for WordPress is open source under the
-  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE" target="_blank">MIT licence</a>.
-  Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>
-  and the <a href="https://ipquery.io" target="_blank">IpQuery API</a>.
+# ----------------------------------------------------------------------
+#  "Edit this page" + last-modified timestamp
+# ----------------------------------------------------------------------
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/guibranco/ipquery-wordpress"
+gh_edit_branch: "main"
+gh_edit_source: "docs"
+gh_edit_view_mode: "edit"
 
-# ── Code blocks ───────────────────────────────────────────────────────────────
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p UTC"
+
+# ----------------------------------------------------------------------
+#  Color scheme — light by default, toggle to dark
+# ----------------------------------------------------------------------
+color_scheme: light
 enable_copy_code_button: true
 
-# ── Callouts ──────────────────────────────────────────────────────────────────
+# ----------------------------------------------------------------------
+#  Footer
+# ----------------------------------------------------------------------
+footer_content: >-
+  &copy; 2026 <a href="https://guilherme.stracini.com.br">Guilherme Branco Stracini</a>.
+  IpQuery for WordPress is open source under the
+  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">MIT license</a>.
+  Built with <a href="https://just-the-docs.com">Just the Docs</a>.
+  Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>
+gh_edit_link_text: "Edit this page on GitHub"
+  and the <a href="https://ipquery.io" target="_blank">IpQuery API</a>.
+gh_edit_link: true
+  
+
+# ----------------------------------------------------------------------
+#  Callouts — used in docs via the `{: .note }` syntax
+# ----------------------------------------------------------------------
+callouts_level: quiet
 callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  tip:  
+    title: Tip
+     color: green
   note:
     title: Note
-    color: blue
-  tip:
-    title: Tip
-    color: green
+    color: purple
   warning:
     title: Warning
     color: red
@@ -47,15 +105,57 @@ callouts:
     title: Important
     color: yellow
 
-# ── Plugins ───────────────────────────────────────────────────────────────────
+# ----------------------------------------------------------------------
+#  Mermaid diagrams (used in ARCHITECTURE.md for data-flow diagrams)
+# ----------------------------------------------------------------------
+mermaid:
+  version: "10.9.0"
+
+# ----------------------------------------------------------------------
+#  Jekyll build settings
+# ----------------------------------------------------------------------
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+
 plugins:
-  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-github-metadata
+  - jekyll-remote-theme
+  - jekyll-include-cache
 
-# ── Exclude from build ────────────────────────────────────────────────────────
+# Exclude files from the build
 exclude:
   - Gemfile
   - Gemfile.lock
-  - "*.gem"
+  - node_modules/
   - vendor/
+  - .bundle/
+  - .sass-cache/
+  - .jekyll-cache/
+  - script/
+  - SETUP.md
+
+# ----------------------------------------------------------------------
+#  SEO defaults (picked up by jekyll-seo-tag)
+# ----------------------------------------------------------------------
+author:
+  name: Guilherme Branco Stracini
+  url: https://guilherme.stracini.com.br
+
+twitter:
+  card: summary
+
+# ----------------------------------------------------------------------
+#  Compress HTML output (tiny perf win)
+# ----------------------------------------------------------------------
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: []
+  blanklines: false
+  profile: false
