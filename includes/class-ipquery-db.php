@@ -9,7 +9,7 @@ class IpQuery_DB {
     public static function install(): void {
         global $wpdb;
 
-        $table   = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table   = $wpdb->prefix . IPQUERY_TABLE;
         $charset = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE {$table} (
@@ -44,11 +44,11 @@ class IpQuery_DB {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
-        update_option( 'ipquery_wp_db_version', self::DB_VERSION );
+        update_option( 'ipquery_db_version', self::DB_VERSION );
 
         // Default settings on first install.
-        if ( false === get_option( 'ipquery_wp_settings' ) ) {
-            update_option( 'ipquery_wp_settings', [
+        if ( false === get_option( 'ipquery_settings' ) ) {
+            update_option( 'ipquery_settings', [
                 'tracking_enabled'       => true,
                 'track_logged_in'        => false,
                 'track_admins'           => false,
@@ -63,7 +63,7 @@ class IpQuery_DB {
 
     public static function uninstall(): void {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         $wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
     }
 
@@ -72,7 +72,7 @@ class IpQuery_DB {
     // -------------------------------------------------------------------------
     public static function upsert( array $data ): void {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         $now   = current_time( 'mysql' );
 
         $existing = $wpdb->get_row(
@@ -100,19 +100,19 @@ class IpQuery_DB {
 
     public static function get_total_visits(): int {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return (int) $wpdb->get_var( "SELECT SUM(visit_count) FROM {$table}" ); // phpcs:ignore
     }
 
     public static function get_unique_ips(): int {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ); // phpcs:ignore
     }
 
     public static function get_risk_counts(): array {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return [
             'vpn'        => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE is_vpn = 1" ),        // phpcs:ignore
             'proxy'      => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE is_proxy = 1" ),      // phpcs:ignore
@@ -124,7 +124,7 @@ class IpQuery_DB {
 
     public static function get_top_countries( int $limit = 10 ): array {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return $wpdb->get_results( // phpcs:ignore
             $wpdb->prepare(
                 "SELECT country, country_code, SUM(visit_count) AS visits
@@ -141,7 +141,7 @@ class IpQuery_DB {
 
     public static function get_top_cities( int $limit = 10 ): array {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return $wpdb->get_results( // phpcs:ignore
             $wpdb->prepare(
                 "SELECT city, country, country_code, SUM(visit_count) AS visits
@@ -158,7 +158,7 @@ class IpQuery_DB {
 
     public static function get_coordinates_for_heatmap( int $limit = 500 ): array {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         return $wpdb->get_results( // phpcs:ignore
             $wpdb->prepare(
                 "SELECT latitude, longitude, visit_count AS intensity
@@ -174,7 +174,7 @@ class IpQuery_DB {
 
     public static function get_visitors( array $args = [] ): array {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
 
         $defaults = [
             'per_page'   => 25,
@@ -235,7 +235,7 @@ class IpQuery_DB {
 
     public static function delete_old_records( int $days ): int {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         $wpdb->query( // phpcs:ignore
             $wpdb->prepare(
                 "DELETE FROM {$table} WHERE last_seen < DATE_SUB(NOW(), INTERVAL %d DAY)",
@@ -247,7 +247,7 @@ class IpQuery_DB {
 
     public static function delete_ip( string $ip ): void {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         $wpdb->delete( $table, [ 'ip' => $ip ], [ '%s' ] );
     }
 }

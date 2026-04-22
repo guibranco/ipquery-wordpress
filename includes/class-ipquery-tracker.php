@@ -51,7 +51,7 @@ class IpQuery_Tracker {
         }
 
         // Use a transient so we only hit the API once per IP per hour.
-        $transient_key = 'ipqwp_' . md5( $ip );
+        $transient_key = 'ipq_' . md5( $ip );
         if ( get_transient( $transient_key ) ) {
             // Already looked up recently; just bump the visit count.
             self::bump_visit( $ip );
