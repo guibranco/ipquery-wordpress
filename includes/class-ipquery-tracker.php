@@ -104,7 +104,7 @@ class IpQuery_Tracker {
 
     private static function bump_visit( string $ip ): void {
         global $wpdb;
-        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        $table = $wpdb->prefix . IPQUERY_TABLE;
         $wpdb->query( // phpcs:ignore
             $wpdb->prepare(
                 "UPDATE {$table} SET visit_count = visit_count + 1, last_seen = %s WHERE ip = %s", // phpcs:ignore
