@@ -8,8 +8,8 @@
  * Requires PHP:      8.2
  * Author:            Guilherme Branco Stracini
  * Author URI:        https://github.com/guibranco
- * License:           GPL-2.0-or-later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           MIT
+ * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       ipquery
  *
  * Bundled library:   guibranco/ipquery-php (MIT License)

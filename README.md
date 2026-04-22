@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌍 IpQuery for WordPress
+# 🌍 IpQuery
 
 **Track and analyse every visitor. Visualise traffic. Detect threats.**
 
@@ -89,7 +89,7 @@ Visitor browser request
   IpQuery_DB::upsert()  →  wp_ipquery_visitors
         │
         ▼
-  set_transient( "ipqwp_{md5}", 1, HOUR_IN_SECONDS )
+  set_transient( "ipq_{md5}", 1, HOUR_IN_SECONDS )
 ```
 
 ---

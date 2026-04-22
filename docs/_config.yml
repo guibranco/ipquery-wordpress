@@ -71,13 +71,11 @@ enable_copy_code_button: true
 footer_content: >-
   &copy; 2026 <a href="https://guilherme.stracini.com.br">Guilherme Branco Stracini</a>.
   IpQuery for WordPress is open source under the
-  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">MIT license</a>.
+  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">GPL-2.0-or-later license</a>.
   Built with <a href="https://just-the-docs.com">Just the Docs</a>.
   Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>
-gh_edit_link_text: "Edit this page on GitHub"
   and the <a href="https://ipquery.io" target="_blank">IpQuery API</a>.
-gh_edit_link: true
-  
+
 
 # ----------------------------------------------------------------------
 #  Callouts — used in docs via the `{: .note }` syntax
@@ -92,18 +90,15 @@ callouts:
   new:
     title: New
     color: green
-  tip:  
+  tip:
     title: Tip
-     color: green
+    color: green
   note:
     title: Note
     color: purple
   warning:
     title: Warning
     color: red
-  important:
-    title: Important
-    color: yellow
 
 # ----------------------------------------------------------------------
 #  Mermaid diagrams (used in ARCHITECTURE.md for data-flow diagrams)

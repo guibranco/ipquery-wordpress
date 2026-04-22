@@ -36,7 +36,7 @@ Browser request
          ├─ IpQueryClient::getIpData($ip)  ← ipquery-php library
          │   └─ GET https://api.ipquery.io/{ip}?format=json
          ├─ IpQuery_DB::upsert($row)
-         └─ set_transient("ipqwp_{md5($ip)}", 1, HOUR_IN_SECONDS)
+         └─ set_transient("ipq_{md5($ip)}", 1, HOUR_IN_SECONDS)
 ```
 
 The critical design choice is the **`shutdown` deferral**: the API call to IpQuery happens *after* the response has been sent to the visitor's browser. This means tracking never adds latency to page loads.
@@ -63,7 +63,7 @@ Each candidate is validated with `filter_var($ip, FILTER_VALIDATE_IP)` before be
 
 ## Transient caching
 
-Each looked-up IP gets a WordPress transient with the key `ipqwp_{md5($ip)}` and a TTL of **1 hour**. Subsequent visits from the same IP within that hour only trigger a lightweight `UPDATE ... SET visit_count = visit_count + 1` query — no API call is made.
+Each looked-up IP gets a WordPress transient with the key `ipq_{md5($ip)}` and a TTL of **1 hour**. Subsequent visits from the same IP within that hour only trigger a lightweight `UPDATE ... SET visit_count = visit_count + 1` query — no API call is made.
 
 After the hour expires the next visit will trigger a fresh API call, which updates all enrichment fields (location, ISP, risk) in the database row.
 
