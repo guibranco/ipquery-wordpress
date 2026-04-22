@@ -6,7 +6,7 @@ description: >-
 url: "https://guilherme.stracini.com.br"
 baseurl: "/ipquery-wordpress"
 
-theme: just-the-docs
+remote_theme: just-the-docs/just-the-docs@v0.10.0
 
 # ── Navigation ────────────────────────────────────────────────────────────────
 search_enabled: true
@@ -49,6 +49,7 @@ callouts:
 
 # ── Plugins ───────────────────────────────────────────────────────────────────
 plugins:
+  - jekyll-remote-theme
   - jekyll-seo-tag
   - jekyll-sitemap
 

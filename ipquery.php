@@ -1,0 +1,58 @@
+<?php
+/**
+ * Plugin Name:       IpQuery
+ * Plugin URI:        https://guilherme.stracini.com.br/ipquery-wordpress/
+ * Description:       Track and analyse visitor IP data using the IpQuery API (via guibranco/ipquery-php). Displays location maps, traffic heatmaps, and VPN/proxy statistics.
+ * Version:           1.0.0
+ * Requires at least: 6.0
+ * Requires PHP:      8.2
+ * Author:            Guilherme Branco Stracini
+ * Author URI:        https://github.com/guibranco
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       ipquery
+ *
+ * Bundled library:   guibranco/ipquery-php (MIT License)
+ * Library URI:       https://github.com/guibranco/ipquery-php
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+define( 'IPQUERY_VERSION', '1.0.0' );
+define( 'IPQUERY_FILE',    __FILE__ );
+define( 'IPQUERY_DIR',     plugin_dir_path( __FILE__ ) );
+define( 'IPQUERY_URL',     plugin_dir_url( __FILE__ ) );
+define( 'IPQUERY_TABLE',   'ipquery_visitors' );
+
+require_once IPQUERY_DIR . 'includes/vendor/IpQueryException.php';
+require_once IPQUERY_DIR . 'includes/vendor/Response/Isp.php';
+require_once IPQUERY_DIR . 'includes/vendor/Response/Location.php';
+require_once IPQUERY_DIR . 'includes/vendor/Response/Risk.php';
+require_once IPQUERY_DIR . 'includes/vendor/Response/IpQueryResponse.php';
+require_once IPQUERY_DIR . 'includes/vendor/IIpQueryClient.php';
+require_once IPQUERY_DIR . 'includes/vendor/IpQueryClient.php';
+require_once IPQUERY_DIR . 'includes/class-ipquery-db.php';
+require_once IPQUERY_DIR . 'includes/class-ipquery-tracker.php';
+require_once IPQUERY_DIR . 'includes/class-ipquery-admin.php';
+
+register_activation_hook( IPQUERY_FILE,   [ 'IpQuery_DB', 'install' ] );
+register_deactivation_hook( IPQUERY_FILE, [ 'IpQuery_DB', 'deactivate' ] );
+register_uninstall_hook( IPQUERY_FILE,    'ipquery_uninstall' );
+
+function ipquery_uninstall(): void {
+    IpQuery_DB::uninstall();
+    delete_option( 'ipquery_settings' );
+    delete_option( 'ipquery_db_version' );
+}
+
+add_action( 'init', 'ipquery_init' );
+function ipquery_init(): void {
+    $settings = get_option( 'ipquery_settings', [] );
+    if ( ! empty( $settings['tracking_enabled'] ) ) {
+        IpQuery_Tracker::init( $settings );
+    }
+}
+
+if ( is_admin() ) {
+    add_action( 'plugins_loaded', [ 'IpQuery_Admin', 'init' ] );
+}

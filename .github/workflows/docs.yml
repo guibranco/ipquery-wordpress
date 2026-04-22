@@ -31,9 +31,9 @@ jobs:
           bundler-cache: true
           working-directory: docs
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
+      # Do NOT use actions/jekyll-build-pages here — it runs inside the locked
+      # github-pages gem (Jekyll 3) which cannot satisfy our Gemfile. We install
+      # our own gems (Jekyll 4 + jekyll-remote-theme) via ruby/setup-ruby above.
       - name: Build with Jekyll
         working-directory: docs
         run: bundle exec jekyll build --destination ../_site
