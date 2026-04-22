@@ -139,6 +139,23 @@ class IpQuery_DB {
         ) ?: [];
     }
 
+    public static function get_top_cities( int $limit = 10 ): array {
+        global $wpdb;
+        $table = $wpdb->prefix . IPQUERY_WP_TABLE;
+        return $wpdb->get_results( // phpcs:ignore
+            $wpdb->prepare(
+                "SELECT city, country, country_code, SUM(visit_count) AS visits
+                 FROM {$table}
+                 WHERE city IS NOT NULL AND city != ''
+                 GROUP BY city, country_code
+                 ORDER BY visits DESC
+                 LIMIT %d",
+                $limit
+            ),
+            ARRAY_A
+        ) ?: [];
+    }
+
     public static function get_coordinates_for_heatmap( int $limit = 500 ): array {
         global $wpdb;
         $table = $wpdb->prefix . IPQUERY_WP_TABLE;
