@@ -97,7 +97,7 @@
     <!-- About / API info -->
     <hr>
     <div class="ipquery-panel" style="margin-top:16px;">
-        <h3><?php esc_html_e( 'About IpQuery API', 'ipquery-wp' ); ?></h3>
+        <h3><?php esc_html_e( 'About IpQuery for WordPress', 'ipquery-wp' ); ?></h3>
         <p>
             <?php esc_html_e( 'This plugin uses the free IpQuery API (', 'ipquery-wp' ); ?>
             <a href="https://ipquery.io" target="_blank" rel="noopener">ipquery.io</a>
@@ -107,12 +107,19 @@
             <?php esc_html_e( 'Lookups are cached for 1 hour per IP via WordPress transients to minimise API calls and avoid rate limits.', 'ipquery-wp' ); ?>
         </p>
         <p>
-            <strong><?php esc_html_e( 'Plugin:', 'ipquery-wp' ); ?></strong>
-            <a href="https://github.com/guibranco/ipquery-wordpress" target="_blank" rel="noopener">guibranco/ipquery-wordpress</a>
+            <a href="https://guilherme.stracini.com.br/ipquery-wordpress/" target="_blank" rel="noopener" class="button button-secondary">
+                <?php esc_html_e( 'Documentation', 'ipquery-wp' ); ?>
+            </a>
+            &nbsp;
+            <a href="https://github.com/guibranco/ipquery-wordpress" target="_blank" rel="noopener" class="button button-secondary">
+                <?php esc_html_e( 'GitHub', 'ipquery-wp' ); ?>
+            </a>
         </p>
         <p>
             <strong><?php esc_html_e( 'PHP Library:', 'ipquery-wp' ); ?></strong>
             <a href="https://github.com/guibranco/ipquery-php" target="_blank" rel="noopener">guibranco/ipquery-php</a>
+            &mdash;
+            <?php esc_html_e( 'the underlying API client bundled inside this plugin.', 'ipquery-wp' ); ?>
         </p>
 
         <table class="widefat striped" style="max-width:500px;margin-top:12px;">

@@ -1,0 +1,60 @@
+title: IpQuery for WordPress
+description: >-
+  Track and analyse visitor IP data using the IpQuery API.
+  Displays location maps, traffic heatmaps, and VPN/proxy statistics.
+
+url: "https://guilherme.stracini.com.br"
+baseurl: "/ipquery-wordpress"
+
+theme: just-the-docs
+
+# ── Navigation ────────────────────────────────────────────────────────────────
+search_enabled: true
+heading_anchors: true
+permalink: pretty
+
+# ── Header links ─────────────────────────────────────────────────────────────
+aux_links:
+  "GitHub":
+    - "https://github.com/guibranco/ipquery-wordpress"
+  "IpQuery API":
+    - "https://ipquery.io"
+
+aux_links_new_tab: true
+
+# ── Footer ────────────────────────────────────────────────────────────────────
+footer_content: >-
+  IpQuery for WordPress is open source under the
+  <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE" target="_blank">MIT licence</a>.
+  Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>
+  and the <a href="https://ipquery.io" target="_blank">IpQuery API</a>.
+
+# ── Code blocks ───────────────────────────────────────────────────────────────
+enable_copy_code_button: true
+
+# ── Callouts ──────────────────────────────────────────────────────────────────
+callouts:
+  note:
+    title: Note
+    color: blue
+  tip:
+    title: Tip
+    color: green
+  warning:
+    title: Warning
+    color: red
+  important:
+    title: Important
+    color: yellow
+
+# ── Plugins ───────────────────────────────────────────────────────────────────
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ── Exclude from build ────────────────────────────────────────────────────────
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - "*.gem"
+  - vendor/
