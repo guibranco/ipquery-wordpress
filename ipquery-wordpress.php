@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       IpQuery for WordPress
- * Plugin URI:        https://github.com/guibranco/ipquery-wordpress
- * Description:       Track and analyse visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy statistics.
+ * Plugin URI:        https://guilherme.stracini.com.br/ipquery-wordpress/
+ * Description:       Track and analyse visitor IP data using the IpQuery API (via guibranco/ipquery-php). Displays location maps, traffic heatmaps, and VPN/proxy statistics.
  * Version:           1.0.0
  * Requires at least: 6.0
  * Requires PHP:      8.2
