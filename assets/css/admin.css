@@ -1,0 +1,234 @@
+/* IpQuery for WordPress – Admin Styles */
+
+.ipquery-wrap h1 .dashicons {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    margin-right: 6px;
+    color: #2271b1;
+}
+
+/* ── Stat cards ─────────────────────────────────────────────────────────── */
+.ipquery-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.ipquery-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: #fff;
+    border-radius: 6px;
+    border-left: 4px solid;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    min-width: 180px;
+    flex: 1;
+}
+
+.ipquery-card--blue   { border-color: #2271b1; }
+.ipquery-card--green  { border-color: #00a32a; }
+.ipquery-card--orange { border-color: #dba617; }
+.ipquery-card--red    { border-color: #d63638; }
+
+.ipquery-card__icon {
+    font-size: 34px;
+    width: 34px;
+    height: 34px;
+    color: #72777c;
+}
+
+.ipquery-card--blue   .ipquery-card__icon { color: #2271b1; }
+.ipquery-card--green  .ipquery-card__icon { color: #00a32a; }
+.ipquery-card--orange .ipquery-card__icon { color: #dba617; }
+.ipquery-card--red    .ipquery-card__icon { color: #d63638; }
+
+.ipquery-card__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.ipquery-card__value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #1d2327;
+}
+
+.ipquery-card__label {
+    font-size: 13px;
+    color: #646970;
+    margin-top: 2px;
+}
+
+/* ── Layout panels ───────────────────────────────────────────────────────── */
+.ipquery-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.ipquery-panel {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.ipquery-panel h2 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.ipquery-panel--wide   { flex: 2 1 500px; }
+.ipquery-panel--narrow { flex: 1 1 260px; }
+.ipquery-panel--half   { flex: 1 1 360px; }
+
+/* ── Risk grid ──────────────────────────────────────────────────────────── */
+.ipquery-risk-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ipquery-risk-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    background: #f6f7f7;
+    border-radius: 6px;
+    border-top: 3px solid;
+    min-width: 110px;
+    text-align: center;
+    flex: 1;
+}
+
+.ipquery-risk-item .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+}
+
+.ipquery-risk-item strong {
+    font-size: 22px;
+    line-height: 1;
+    color: #1d2327;
+}
+
+.ipquery-risk-item small {
+    font-size: 12px;
+    color: #646970;
+    margin-top: 3px;
+}
+
+.ipquery-risk-item .ipquery-pct {
+    font-size: 11px;
+    color: #8c8f94;
+    margin-top: 2px;
+}
+
+.ipquery-risk-item--red    { border-color: #d63638; }
+.ipquery-risk-item--orange { border-color: #dba617; }
+.ipquery-risk-item--blue   { border-color: #2271b1; }
+.ipquery-risk-item--green  { border-color: #00a32a; }
+
+.ipquery-risk-item--red    .dashicons { color: #d63638; }
+.ipquery-risk-item--orange .dashicons { color: #dba617; }
+.ipquery-risk-item--blue   .dashicons { color: #2271b1; }
+.ipquery-risk-item--green  .dashicons { color: #00a32a; }
+
+/* ── Badges ──────────────────────────────────────────────────────────────── */
+.ipquery-badge {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.ipquery-badge--green  { background: #00a32a; }
+.ipquery-badge--orange { background: #dba617; }
+.ipquery-badge--red    { background: #d63638; }
+.ipquery-badge--blue   { background: #2271b1; }
+
+/* ── Risk score ──────────────────────────────────────────────────────────── */
+.ipquery-score {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.ipquery-score--green  { background: #00a32a; }
+.ipquery-score--orange { background: #dba617; }
+.ipquery-score--red    { background: #d63638; }
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+.ipquery-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin: 16px 0 12px;
+}
+
+.ipquery-filter-form,
+.ipquery-lookup-form {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ── Visitors table ──────────────────────────────────────────────────────── */
+.ipquery-visitors-table td,
+.ipquery-visitors-table th {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.ipquery-visitors-table code {
+    font-size: 12px;
+}
+
+.ipquery-count {
+    margin: 0 0 8px;
+    color: #646970;
+}
+
+/* ── Map ─────────────────────────────────────────────────────────────────── */
+#ipquery-map {
+    border-radius: 4px;
+    border: 1px solid #c3c4c7;
+    overflow: hidden; /* prevent Leaflet tile overflow from pushing page layout */
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .ipquery-panel--wide,
+    .ipquery-panel--narrow,
+    .ipquery-panel--half {
+        flex: 1 1 100%;
+    }
+
+    .ipquery-cards {
+        flex-direction: column;
+    }
+}
