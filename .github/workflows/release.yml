@@ -87,11 +87,31 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Stage plugin under its slug directory
+        run: |
+          mkdir -p /tmp/ipquery
+          rsync -a \
+            --exclude='.git'           \
+            --exclude='.github'        \
+            --exclude='.gitignore'     \
+            --exclude='.wp-env.json'   \
+            --exclude='docs'           \
+            --exclude='tests'          \
+            --exclude='/vendor'        \
+            --exclude='composer.json'  \
+            --exclude='composer.lock'  \
+            --exclude='phpunit.xml'    \
+            --exclude='phpcs.xml'      \
+            --exclude='GitVersion.yml' \
+            --exclude='README.md'      \
+            ./ /tmp/ipquery/
+
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wp-version: 'latest'
+          build-dir: /tmp/ipquery
 
   # ---------------------------------------------------------------------------
   # Bump version files, tag, build release zip, publish GitHub Release
