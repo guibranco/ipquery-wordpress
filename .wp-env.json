@@ -2,7 +2,7 @@
   "core": null,
   "plugins": [
     "https://downloads.wordpress.org/plugin/plugin-check.zip",
-    "/tmp/ipquery"
+    "./_build/ipquery"
   ],
   "testsEnvironment": false
 }
