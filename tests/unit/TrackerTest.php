@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers IpQuery_Tracker
- */
+#[CoversClass(IpQuery_Tracker::class)]
 class TrackerTest extends TestCase {
 
     private array $serverBackup = [];
