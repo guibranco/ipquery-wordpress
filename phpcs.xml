@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="IpQuery">
+    <description>IpQuery WordPress Plugin Coding Standards</description>
+
+    <file>ipquery.php</file>
+    <file>includes/</file>
+    <file>admin/</file>
+
+    <exclude-pattern>includes/vendor/*</exclude-pattern>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>tests/*</exclude-pattern>
+
+    <rule ref="WordPress">
+        <!-- Class files follow WordPress class naming, not PSR-4 filename conventions -->
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+    </rule>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array" value="ipquery" />
+        </properties>
+    </rule>
+
+    <config name="minimum_supported_wp_version" value="6.0" />
+
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
+    <arg value="sp" />
+</ruleset>
