@@ -155,7 +155,7 @@ jobs:
           echo "ZIP=/tmp/ipquery-${VERSION}.zip" >> "$GITHUB_ENV"
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ needs.version.outputs.semVer }}
           name: IpQuery v${{ needs.version.outputs.semVer }}
