@@ -15,11 +15,11 @@ defined( 'ABSPATH' ) || exit; ?>
 	<hr class="wp-header-end">
 
 	<?php
-	$total_visits  = IpQuery_DB::get_total_visits();
-	$unique_ips    = IpQuery_DB::get_unique_ips();
-	$risk_counts   = IpQuery_DB::get_risk_counts();
-	$top_countries = IpQuery_DB::get_top_countries( 10 );
-	$top_cities    = IpQuery_DB::get_top_cities( 10 );
+	$ipquery_total_visits  = IpQuery_DB::get_total_visits();
+	$ipquery_unique_ips    = IpQuery_DB::get_unique_ips();
+	$ipquery_risk_counts   = IpQuery_DB::get_risk_counts();
+	$ipquery_top_countries = IpQuery_DB::get_top_countries( 10 );
+	$ipquery_top_cities    = IpQuery_DB::get_top_cities( 10 );
 	?>
 
 	<!-- Stat cards -->
@@ -27,21 +27,21 @@ defined( 'ABSPATH' ) || exit; ?>
 		<div class="ipquery-card ipquery-card--blue">
 			<div class="ipquery-card__icon dashicons dashicons-admin-users"></div>
 			<div class="ipquery-card__body">
-				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $total_visits ) ); ?></span>
+				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_total_visits ) ); ?></span>
 				<span class="ipquery-card__label"><?php esc_html_e( 'Total Visits', 'ipquery' ); ?></span>
 			</div>
 		</div>
 		<div class="ipquery-card ipquery-card--green">
 			<div class="ipquery-card__icon dashicons dashicons-networking"></div>
 			<div class="ipquery-card__body">
-				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $unique_ips ) ); ?></span>
+				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_unique_ips ) ); ?></span>
 				<span class="ipquery-card__label"><?php esc_html_e( 'Unique IPs', 'ipquery' ); ?></span>
 			</div>
 		</div>
 		<div class="ipquery-card ipquery-card--orange">
 			<div class="ipquery-card__icon dashicons dashicons-shield-alt"></div>
 			<div class="ipquery-card__body">
-				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $risk_counts['vpn'] + $risk_counts['proxy'] + $risk_counts['tor'] ) ); ?></span>
+				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_risk_counts['vpn'] + $ipquery_risk_counts['proxy'] + $ipquery_risk_counts['tor'] ) ); ?></span>
 				<span class="ipquery-card__label"><?php esc_html_e( 'VPN / Proxy / Tor', 'ipquery' ); ?></span>
 			</div>
 		</div>
@@ -49,11 +49,11 @@ defined( 'ABSPATH' ) || exit; ?>
 			<div class="ipquery-card__icon dashicons dashicons-warning"></div>
 			<div class="ipquery-card__body">
 				<?php
-				$risky_pct = $unique_ips > 0
-					? round( ( ( $risk_counts['vpn'] + $risk_counts['proxy'] + $risk_counts['tor'] ) / $unique_ips ) * 100, 1 )
+				$ipquery_risky_pct = $ipquery_unique_ips > 0
+					? round( ( ( $ipquery_risk_counts['vpn'] + $ipquery_risk_counts['proxy'] + $ipquery_risk_counts['tor'] ) / $ipquery_unique_ips ) * 100, 1 )
 					: 0;
 				?>
-				<span class="ipquery-card__value"><?php echo esc_html( $risky_pct ); ?>%</span>
+				<span class="ipquery-card__value"><?php echo esc_html( $ipquery_risky_pct ); ?>%</span>
 				<span class="ipquery-card__label"><?php esc_html_e( 'Risk Rate', 'ipquery' ); ?></span>
 			</div>
 		</div>
@@ -100,22 +100,22 @@ defined( 'ABSPATH' ) || exit; ?>
 					</tr>
 				</thead>
 				<tbody>
-				<?php if ( empty( $top_countries ) ) : ?>
+				<?php if ( empty( $ipquery_top_countries ) ) : ?>
 					<tr><td colspan="3"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
 				<?php else : ?>
-					<?php foreach ( $top_countries as $row ) : ?>
+					<?php foreach ( $ipquery_top_countries as $ipquery_row ) : ?>
 					<tr>
 						<td>
-							<?php if ( $row['country_code'] ) : ?>
-								<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $row['country_code'] ) ); ?>.png"
+							<?php if ( $ipquery_row['country_code'] ) : ?>
+								<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $ipquery_row['country_code'] ) ); ?>.png"
 									width="16" height="12"
-									alt="<?php echo esc_attr( $row['country_code'] ); ?>"
+									alt="<?php echo esc_attr( $ipquery_row['country_code'] ); ?>"
 									style="vertical-align:middle;margin-right:4px;">
 							<?php endif; ?>
-							<?php echo esc_html( $row['country'] ?? $row['country_code'] ?? '—' ); ?>
+							<?php echo esc_html( $ipquery_row['country'] ?? $ipquery_row['country_code'] ?? '—' ); ?>
 						</td>
-						<td><?php echo esc_html( number_format_i18n( (int) $row['visits'] ) ); ?></td>
-						<td><?php echo $total_visits > 0 ? esc_html( round( ( $row['visits'] / $total_visits ) * 100, 1 ) ) . '%' : '—'; ?></td>
+						<td><?php echo esc_html( number_format_i18n( (int) $ipquery_row['visits'] ) ); ?></td>
+						<td><?php echo $ipquery_total_visits > 0 ? esc_html( round( ( $ipquery_row['visits'] / $ipquery_total_visits ) * 100, 1 ) ) . '%' : '—'; ?></td>
 					</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
@@ -139,23 +139,23 @@ defined( 'ABSPATH' ) || exit; ?>
 					</tr>
 				</thead>
 				<tbody>
-				<?php if ( empty( $top_cities ) ) : ?>
+				<?php if ( empty( $ipquery_top_cities ) ) : ?>
 					<tr><td colspan="4"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
 				<?php else : ?>
-					<?php foreach ( $top_cities as $row ) : ?>
+					<?php foreach ( $ipquery_top_cities as $ipquery_row ) : ?>
 					<tr>
-						<td><?php echo esc_html( $row['city'] ); ?></td>
+						<td><?php echo esc_html( $ipquery_row['city'] ); ?></td>
 						<td>
-							<?php if ( $row['country_code'] ) : ?>
-								<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $row['country_code'] ) ); ?>.png"
+							<?php if ( $ipquery_row['country_code'] ) : ?>
+								<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $ipquery_row['country_code'] ) ); ?>.png"
 									width="16" height="12"
-									alt="<?php echo esc_attr( $row['country_code'] ); ?>"
+									alt="<?php echo esc_attr( $ipquery_row['country_code'] ); ?>"
 									style="vertical-align:middle;margin-right:4px;">
 							<?php endif; ?>
-							<?php echo esc_html( $row['country'] ?? $row['country_code'] ?? '—' ); ?>
+							<?php echo esc_html( $ipquery_row['country'] ?? $ipquery_row['country_code'] ?? '—' ); ?>
 						</td>
-						<td><?php echo esc_html( number_format_i18n( (int) $row['visits'] ) ); ?></td>
-						<td><?php echo $total_visits > 0 ? esc_html( round( ( $row['visits'] / $total_visits ) * 100, 1 ) ) . '%' : '—'; ?></td>
+						<td><?php echo esc_html( number_format_i18n( (int) $ipquery_row['visits'] ) ); ?></td>
+						<td><?php echo $ipquery_total_visits > 0 ? esc_html( round( ( $ipquery_row['visits'] / $ipquery_total_visits ) * 100, 1 ) ) . '%' : '—'; ?></td>
 					</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
@@ -170,46 +170,46 @@ defined( 'ABSPATH' ) || exit; ?>
 			<h2><?php esc_html_e( 'Risk Details', 'ipquery' ); ?></h2>
 			<div class="ipquery-risk-grid">
 				<?php
-				$risk_items = array(
+				$ipquery_risk_items = array(
 					array(
 						'label' => __( 'VPN', 'ipquery' ),
-						'count' => $risk_counts['vpn'],
+						'count' => $ipquery_risk_counts['vpn'],
 						'icon'  => 'lock',
 						'class' => 'orange',
 					),
 					array(
 						'label' => __( 'Proxy', 'ipquery' ),
-						'count' => $risk_counts['proxy'],
+						'count' => $ipquery_risk_counts['proxy'],
 						'icon'  => 'update',
 						'class' => 'red',
 					),
 					array(
 						'label' => __( 'Tor', 'ipquery' ),
-						'count' => $risk_counts['tor'],
+						'count' => $ipquery_risk_counts['tor'],
 						'icon'  => 'hidden',
 						'class' => 'red',
 					),
 					array(
 						'label' => __( 'Datacenter', 'ipquery' ),
-						'count' => $risk_counts['datacenter'],
+						'count' => $ipquery_risk_counts['datacenter'],
 						'icon'  => 'cloud',
 						'class' => 'blue',
 					),
 					array(
 						'label' => __( 'Mobile', 'ipquery' ),
-						'count' => $risk_counts['mobile'],
+						'count' => $ipquery_risk_counts['mobile'],
 						'icon'  => 'smartphone',
 						'class' => 'green',
 					),
 				);
-				foreach ( $risk_items as $item ) :
+				foreach ( $ipquery_risk_items as $ipquery_item ) :
 					?>
-			<div class="ipquery-risk-item ipquery-risk-item--<?php echo esc_attr( $item['class'] ); ?>">
-				<span class="dashicons dashicons-<?php echo esc_attr( $item['icon'] ); ?>"></span>
-				<strong><?php echo esc_html( number_format_i18n( $item['count'] ) ); ?></strong>
-				<small><?php echo esc_html( $item['label'] ); ?></small>
-					<?php if ( $unique_ips > 0 ) : ?>
-				<span class="ipquery-pct"><?php echo esc_html( round( ( $item['count'] / $unique_ips ) * 100, 1 ) ); ?>%</span>
+			<div class="ipquery-risk-item ipquery-risk-item--<?php echo esc_attr( $ipquery_item['class'] ); ?>">
+				<span class="dashicons dashicons-<?php echo esc_attr( $ipquery_item['icon'] ); ?>"></span>
+				<strong><?php echo esc_html( number_format_i18n( $ipquery_item['count'] ) ); ?></strong>
+				<small><?php echo esc_html( $ipquery_item['label'] ); ?></small>
+					<?php if ( $ipquery_unique_ips > 0 ) : ?>
+				<span class="ipquery-pct"><?php echo esc_html( round( ( $ipquery_item['count'] / $ipquery_unique_ips ) * 100, 1 ) ); ?>%</span>
 				<?php endif; ?>
 			</div>
 			<?php endforeach; ?>
