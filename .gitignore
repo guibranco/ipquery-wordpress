@@ -24,3 +24,6 @@ docs/vendor/
 # OS
 .DS_Store
 Thumbs.db
+
+# WordPress plugin check
+_build/*
