@@ -182,7 +182,7 @@ class IpQuery_DB {
 		global $wpdb;
 		$table  = $wpdb->prefix . IPQUERY_TABLE;
 		$sql    = $wpdb->prepare( "SELECT country, country_code, SUM(visit_count) AS visits FROM {$table} WHERE country_code IS NOT NULL GROUP BY country_code ORDER BY visits DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
 	}
 
@@ -196,7 +196,7 @@ class IpQuery_DB {
 		global $wpdb;
 		$table  = $wpdb->prefix . IPQUERY_TABLE;
 		$sql    = $wpdb->prepare( "SELECT city, country, country_code, SUM(visit_count) AS visits FROM {$table} WHERE city IS NOT NULL AND city != '' GROUP BY city, country_code ORDER BY visits DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
 	}
 
@@ -210,7 +210,7 @@ class IpQuery_DB {
 		global $wpdb;
 		$table  = $wpdb->prefix . IPQUERY_TABLE;
 		$sql    = $wpdb->prepare( "SELECT latitude, longitude, visit_count AS intensity FROM {$table} WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY visit_count DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
 	}
 

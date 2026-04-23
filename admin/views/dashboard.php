@@ -208,7 +208,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<span class="dashicons dashicons-<?php echo esc_attr( $item['icon'] ); ?>"></span>
 				<strong><?php echo esc_html( number_format_i18n( $item['count'] ) ); ?></strong>
 				<small><?php echo esc_html( $item['label'] ); ?></small>
-				<?php if ( $unique_ips > 0 ) : ?>
+					<?php if ( $unique_ips > 0 ) : ?>
 				<span class="ipquery-pct"><?php echo esc_html( round( ( $item['count'] / $unique_ips ) * 100, 1 ) ); ?>%</span>
 				<?php endif; ?>
 			</div>

@@ -59,7 +59,7 @@ defined( 'ABSPATH' ) || exit; ?>
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			if ( ! empty( $_GET['s'] ) || ! empty( $_GET['risk_filter'] ) ) :
 				// phpcs:enable WordPress.Security.NonceVerification.Recommended
-			?>
+				?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=ipquery-visitors' ) ); ?>" class="button"><?php esc_html_e( 'Reset', 'ipquery' ); ?></a>
 			<?php endif; ?>
 		</form>
@@ -114,15 +114,15 @@ defined( 'ABSPATH' ) || exit; ?>
 				'order'   => $next_order,
 			)
 		);
-		$arrow = $is_sorted ? ( 'ASC' === $current_order ? ' ▲' : ' ▼' ) : '';
+		$arrow      = $is_sorted ? ( 'ASC' === $current_order ? ' ▲' : ' ▼' ) : '';
 		return '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . esc_html( $arrow ) . '</a>';
 	}
 	?>
 
 	<p class="ipquery-count">
 		<?php
-		// translators: %s is the formatted record count.
 		printf(
+			// translators: %s is the formatted record count.
 			esc_html( _n( '%s record found.', '%s records found.', $ipq_total, 'ipquery' ) ),
 			'<strong>' . esc_html( number_format_i18n( $ipq_total ) ) . '</strong>'
 		);
