@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   # ---------------------------------------------------------------------------
   # Determine the next semantic version from git history + tags.
