@@ -42,16 +42,16 @@ defined( 'ABSPATH' ) || exit; ?>
 
 			<?php
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			$ipq_risk_filter = sanitize_text_field( wp_unslash( $_GET['risk_filter'] ?? '' ) );
+			$ipquery_risk_filter = sanitize_text_field( wp_unslash( $_GET['risk_filter'] ?? '' ) );
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			?>
 			<select name="risk_filter">
 				<option value=""><?php esc_html_e( 'All types', 'ipquery' ); ?></option>
-				<option value="is_vpn"        <?php selected( $ipq_risk_filter, 'is_vpn' ); ?>><?php esc_html_e( 'VPN', 'ipquery' ); ?></option>
-				<option value="is_proxy"      <?php selected( $ipq_risk_filter, 'is_proxy' ); ?>><?php esc_html_e( 'Proxy', 'ipquery' ); ?></option>
-				<option value="is_tor"        <?php selected( $ipq_risk_filter, 'is_tor' ); ?>><?php esc_html_e( 'Tor', 'ipquery' ); ?></option>
-				<option value="is_datacenter" <?php selected( $ipq_risk_filter, 'is_datacenter' ); ?>><?php esc_html_e( 'Datacenter', 'ipquery' ); ?></option>
-				<option value="is_mobile"     <?php selected( $ipq_risk_filter, 'is_mobile' ); ?>><?php esc_html_e( 'Mobile', 'ipquery' ); ?></option>
+				<option value="is_vpn"        <?php selected( $ipquery_risk_filter, 'is_vpn' ); ?>><?php esc_html_e( 'VPN', 'ipquery' ); ?></option>
+				<option value="is_proxy"      <?php selected( $ipquery_risk_filter, 'is_proxy' ); ?>><?php esc_html_e( 'Proxy', 'ipquery' ); ?></option>
+				<option value="is_tor"        <?php selected( $ipquery_risk_filter, 'is_tor' ); ?>><?php esc_html_e( 'Tor', 'ipquery' ); ?></option>
+				<option value="is_datacenter" <?php selected( $ipquery_risk_filter, 'is_datacenter' ); ?>><?php esc_html_e( 'Datacenter', 'ipquery' ); ?></option>
+				<option value="is_mobile"     <?php selected( $ipquery_risk_filter, 'is_mobile' ); ?>><?php esc_html_e( 'Mobile', 'ipquery' ); ?></option>
 			</select>
 
 			<?php submit_button( __( 'Filter', 'ipquery' ), 'secondary', 'filter', false ); ?>
@@ -75,26 +75,26 @@ defined( 'ABSPATH' ) || exit; ?>
 
 	<?php
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
-	$ipq_per_page     = 25;
-	$ipq_current_page = max( 1, (int) sanitize_text_field( wp_unslash( $_GET['paged'] ?? '1' ) ) );
-	$ipq_orderby      = sanitize_text_field( wp_unslash( $_GET['orderby'] ?? 'last_seen' ) );
-	$ipq_order        = 'ASC' === strtoupper( sanitize_text_field( wp_unslash( $_GET['order'] ?? 'DESC' ) ) ) ? 'ASC' : 'DESC';
+	$ipquery_per_page     = 25;
+	$ipquery_current_page = max( 1, (int) sanitize_text_field( wp_unslash( $_GET['paged'] ?? '1' ) ) );
+	$ipquery_orderby      = sanitize_text_field( wp_unslash( $_GET['orderby'] ?? 'last_seen' ) );
+	$ipquery_order        = 'ASC' === strtoupper( sanitize_text_field( wp_unslash( $_GET['order'] ?? 'DESC' ) ) ) ? 'ASC' : 'DESC';
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-	$ipq_result = IpQuery_DB::get_visitors(
+	$ipquery_result = IpQuery_DB::get_visitors(
 		array(
-			'per_page'    => $ipq_per_page,
-			'page'        => $ipq_current_page,
-			'orderby'     => $ipq_orderby,
-			'order'       => $ipq_order,
+			'per_page'    => $ipquery_per_page,
+			'page'        => $ipquery_current_page,
+			'orderby'     => $ipquery_orderby,
+			'order'       => $ipquery_order,
 			'search'      => sanitize_text_field( wp_unslash( $_GET['s'] ?? '' ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			'risk_filter' => $ipq_risk_filter,
+			'risk_filter' => $ipquery_risk_filter,
 		)
 	);
 
-	$ipq_rows        = $ipq_result['rows'];
-	$ipq_total       = $ipq_result['total'];
-	$ipq_total_pages = ceil( $ipq_total / $ipq_per_page );
+	$ipquery_rows        = $ipquery_result['rows'];
+	$ipquery_total       = $ipquery_result['total'];
+	$ipquery_total_pages = ceil( $ipquery_total / $ipquery_per_page );
 
 	/**
 	 * Returns a sortable column header link.
@@ -123,8 +123,8 @@ defined( 'ABSPATH' ) || exit; ?>
 		<?php
 		printf(
 			// translators: %s is the formatted record count.
-			esc_html( _n( '%s record found.', '%s records found.', $ipq_total, 'ipquery' ) ),
-			'<strong>' . esc_html( number_format_i18n( $ipq_total ) ) . '</strong>'
+			esc_html( _n( '%s record found.', '%s records found.', $ipquery_total, 'ipquery' ) ),
+			'<strong>' . esc_html( number_format_i18n( $ipquery_total ) ) . '</strong>'
 		);
 		?>
 	</p>
@@ -132,77 +132,77 @@ defined( 'ABSPATH' ) || exit; ?>
 	<table class="widefat striped ipquery-visitors-table">
 		<thead>
 			<tr>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'ip', __( 'IP Address', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'country', __( 'Location', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'ip', __( 'IP Address', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'country', __( 'Location', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
 				<th><?php esc_html_e( 'ISP', 'ipquery' ); ?></th>
 				<th><?php esc_html_e( 'Risk Flags', 'ipquery' ); ?></th>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'risk_score', __( 'Score', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'visit_count', __( 'Visits', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'first_seen', __( 'First Seen', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
-				<th><?php echo wp_kses_post( ipquery_sortable_col( 'last_seen', __( 'Last Seen', 'ipquery' ), $ipq_orderby, $ipq_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'risk_score', __( 'Score', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'visit_count', __( 'Visits', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'first_seen', __( 'First Seen', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
+				<th><?php echo wp_kses_post( ipquery_sortable_col( 'last_seen', __( 'Last Seen', 'ipquery' ), $ipquery_orderby, $ipquery_order ) ); ?></th>
 				<th><?php esc_html_e( 'Actions', 'ipquery' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
-		<?php if ( empty( $ipq_rows ) ) : ?>
+		<?php if ( empty( $ipquery_rows ) ) : ?>
 			<tr><td colspan="9"><?php esc_html_e( 'No records found.', 'ipquery' ); ?></td></tr>
 		<?php else : ?>
 			<?php
-			$ipq_allowed_badge_html = array(
+			$ipquery_allowed_badge_html = array(
 				'span' => array( 'class' => true ),
 			);
-			foreach ( $ipq_rows as $ipq_row ) :
-				$ipq_flags = array();
-				if ( $ipq_row['is_vpn'] ) {
-					$ipq_flags[] = '<span class="ipquery-badge ipquery-badge--orange">VPN</span>';
+			foreach ( $ipquery_rows as $ipquery_row ) :
+				$ipquery_flags = array();
+				if ( $ipquery_row['is_vpn'] ) {
+					$ipquery_flags[] = '<span class="ipquery-badge ipquery-badge--orange">VPN</span>';
 				}
-				if ( $ipq_row['is_proxy'] ) {
-					$ipq_flags[] = '<span class="ipquery-badge ipquery-badge--red">Proxy</span>';
+				if ( $ipquery_row['is_proxy'] ) {
+					$ipquery_flags[] = '<span class="ipquery-badge ipquery-badge--red">Proxy</span>';
 				}
-				if ( $ipq_row['is_tor'] ) {
-					$ipq_flags[] = '<span class="ipquery-badge ipquery-badge--red">Tor</span>';
+				if ( $ipquery_row['is_tor'] ) {
+					$ipquery_flags[] = '<span class="ipquery-badge ipquery-badge--red">Tor</span>';
 				}
-				if ( $ipq_row['is_datacenter'] ) {
-					$ipq_flags[] = '<span class="ipquery-badge ipquery-badge--blue">DC</span>';
+				if ( $ipquery_row['is_datacenter'] ) {
+					$ipquery_flags[] = '<span class="ipquery-badge ipquery-badge--blue">DC</span>';
 				}
-				if ( $ipq_row['is_mobile'] ) {
-					$ipq_flags[] = '<span class="ipquery-badge ipquery-badge--green">Mobile</span>';
+				if ( $ipquery_row['is_mobile'] ) {
+					$ipquery_flags[] = '<span class="ipquery-badge ipquery-badge--green">Mobile</span>';
 				}
 
-				$ipq_score     = (int) $ipq_row['risk_score'];
-				$ipq_score_cls = $ipq_score >= 80 ? 'red' : ( $ipq_score >= 40 ? 'orange' : 'green' );
-				$ipq_location  = array_filter( array( $ipq_row['city'], $ipq_row['state'], $ipq_row['country'] ) );
+				$ipquery_score     = (int) $ipquery_row['risk_score'];
+				$ipquery_score_cls = $ipquery_score >= 80 ? 'red' : ( $ipquery_score >= 40 ? 'orange' : 'green' );
+				$ipquery_location  = array_filter( array( $ipquery_row['city'], $ipquery_row['state'], $ipquery_row['country'] ) );
 				?>
 			<tr>
-				<td><code><?php echo esc_html( $ipq_row['ip'] ); ?></code></td>
+				<td><code><?php echo esc_html( $ipquery_row['ip'] ); ?></code></td>
 				<td>
-					<?php if ( $ipq_row['country_code'] ) : ?>
-						<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $ipq_row['country_code'] ) ); ?>.png"
+					<?php if ( $ipquery_row['country_code'] ) : ?>
+						<img src="https://flagcdn.com/16x12/<?php echo esc_attr( strtolower( $ipquery_row['country_code'] ) ); ?>.png"
 							width="16" height="12"
-							alt="<?php echo esc_attr( $ipq_row['country_code'] ); ?>"
+							alt="<?php echo esc_attr( $ipquery_row['country_code'] ); ?>"
 							style="vertical-align:middle;margin-right:4px;">
 					<?php endif; ?>
-					<?php echo esc_html( implode( ', ', $ipq_location ) !== '' ? implode( ', ', $ipq_location ) : '—' ); ?>
+					<?php echo esc_html( implode( ', ', $ipquery_location ) !== '' ? implode( ', ', $ipquery_location ) : '—' ); ?>
 				</td>
-				<td><?php echo esc_html( $ipq_row['isp'] ?? '—' ); ?></td>
+				<td><?php echo esc_html( $ipquery_row['isp'] ?? '—' ); ?></td>
 				<td>
 					<?php
-					if ( $ipq_flags ) {
-						echo wp_kses( implode( ' ', $ipq_flags ), $ipq_allowed_badge_html );
+					if ( $ipquery_flags ) {
+						echo wp_kses( implode( ' ', $ipquery_flags ), $ipquery_allowed_badge_html );
 					} else {
 						echo '<span class="ipquery-badge ipquery-badge--green">Clean</span>';
 					}
 					?>
 				</td>
-				<td><span class="ipquery-score ipquery-score--<?php echo esc_attr( $ipq_score_cls ); ?>"><?php echo esc_html( $ipq_score ); ?></span></td>
-				<td><?php echo esc_html( number_format_i18n( (int) $ipq_row['visit_count'] ) ); ?></td>
-				<td><?php echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $ipq_row['first_seen'] ) ) ); ?></td>
-				<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $ipq_row['last_seen'] ) ) ); ?></td>
+				<td><span class="ipquery-score ipquery-score--<?php echo esc_attr( $ipquery_score_cls ); ?>"><?php echo esc_html( $ipquery_score ); ?></span></td>
+				<td><?php echo esc_html( number_format_i18n( (int) $ipquery_row['visit_count'] ) ); ?></td>
+				<td><?php echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $ipquery_row['first_seen'] ) ) ); ?></td>
+				<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $ipquery_row['last_seen'] ) ) ); ?></td>
 				<td>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
 						<?php wp_nonce_field( 'ipquery_delete_ip' ); ?>
 						<input type="hidden" name="action" value="ipquery_delete_ip">
-						<input type="hidden" name="ip" value="<?php echo esc_attr( $ipq_row['ip'] ); ?>">
+						<input type="hidden" name="ip" value="<?php echo esc_attr( $ipquery_row['ip'] ); ?>">
 						<button type="submit" class="button button-small button-link-delete"
 								onclick="return confirm('<?php echo esc_js( __( 'Delete this IP record?', 'ipquery' ) ); ?>')">
 							<?php esc_html_e( 'Delete', 'ipquery' ); ?>
@@ -215,7 +215,7 @@ defined( 'ABSPATH' ) || exit; ?>
 		</tbody>
 	</table>
 
-	<?php if ( $ipq_total_pages > 1 ) : ?>
+	<?php if ( $ipquery_total_pages > 1 ) : ?>
 	<div class="tablenav bottom">
 		<div class="tablenav-pages">
 			<?php
@@ -224,8 +224,8 @@ defined( 'ABSPATH' ) || exit; ?>
 					array(
 						'base'      => add_query_arg( 'paged', '%#%' ),
 						'format'    => '',
-						'current'   => $ipq_current_page,
-						'total'     => $ipq_total_pages,
+						'current'   => $ipquery_current_page,
+						'total'     => $ipquery_total_pages,
 						'prev_text' => '&laquo;',
 						'next_text' => '&raquo;',
 					)
