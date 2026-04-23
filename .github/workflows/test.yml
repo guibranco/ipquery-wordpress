@@ -69,8 +69,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Stage plugin under its slug directory
+        run: |
+          mkdir -p /tmp/plugin-build/ipquery
+          rsync -a \
+            --exclude='.git'           \
+            --exclude='.github'        \
+            --exclude='.gitignore'     \
+            --exclude='docs'           \
+            --exclude='tests'          \
+            --exclude='vendor'         \
+            --exclude='composer.json'  \
+            --exclude='composer.lock'  \
+            --exclude='phpunit.xml'    \
+            --exclude='phpcs.xml'      \
+            --exclude='GitVersion.yml' \
+            --exclude='README.md'      \
+            ./ /tmp/plugin-build/ipquery/
+
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wp-version: 'latest'
+          build-dir: /tmp/plugin-build
