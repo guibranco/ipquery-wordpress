@@ -17,6 +17,9 @@ class TrackerTest extends TestCase {
         parent::setUp();
         Monkey\setUp();
 
+        Functions\when( 'wp_unslash' )->returnArg();
+        Functions\when( 'sanitize_text_field' )->returnArg();
+
         $this->serverBackup = $_SERVER;
         foreach ( ['HTTP_CF_CONNECTING_IP', 'HTTP_X_REAL_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $key ) {
             unset( $_SERVER[ $key ] );
