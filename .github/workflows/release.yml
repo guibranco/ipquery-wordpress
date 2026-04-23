@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   # ---------------------------------------------------------------------------
   # Determine the next semantic version from git history + tags.
@@ -15,7 +19,7 @@ jobs:
     name: Determine Version
     runs-on: ubuntu-latest
     outputs:
-      semVer: ${{ steps.gitversion.outputs.semVer }}
+      fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -123,7 +127,7 @@ jobs:
 
       - name: Bump version in plugin files
         env:
-          VERSION: ${{ needs.version.outputs.semVer }}
+          VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
           sed -i "s/^ \* Version:.*/ * Version:           ${VERSION}/" ipquery.php
           sed -i "s/define( 'IPQUERY_VERSION',[^)]*)/define( 'IPQUERY_VERSION', '${VERSION}' )/" ipquery.php
@@ -131,7 +135,7 @@ jobs:
 
       - name: Commit version bump, tag, and push
         env:
-          VERSION: ${{ needs.version.outputs.semVer }}
+          VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
           git add ipquery.php readme.txt
           # Commit only when the version files actually changed.
@@ -149,7 +153,7 @@ jobs:
 
       - name: Build release zip
         env:
-          VERSION: ${{ needs.version.outputs.semVer }}
+          VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
           mkdir -p /tmp/ipquery
           rsync -a \
@@ -174,7 +178,7 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ needs.version.outputs.semVer }}
-          name: IpQuery v${{ needs.version.outputs.semVer }}
+          tag_name: v${{ needs.version.outputs.fullSemVer }}
+          name: IpQuery v${{ needs.version.outputs.fullSemVer }}
           generate_release_notes: true
           files: ${{ env.ZIP }}
