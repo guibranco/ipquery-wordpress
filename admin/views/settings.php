@@ -1,4 +1,11 @@
-<?php defined( 'ABSPATH' ) || exit; ?>
+<?php
+/**
+ * Settings admin view.
+ *
+ * @package IpQuery
+ */
+
+defined( 'ABSPATH' ) || exit; ?>
 
 <div class="wrap ipquery-wrap">
 	<h1 class="wp-heading-inline">
@@ -8,8 +15,8 @@
 	<hr class="wp-header-end">
 
 	<?php
-	$settings = get_option( 'ipquery_settings', array() );
-	$defaults = array(
+	$ipq_raw      = get_option( 'ipquery_settings', array() );
+	$ipq_defaults = array(
 		'tracking_enabled'   => true,
 		'track_logged_in'    => false,
 		'track_admins'       => false,
@@ -17,7 +24,7 @@
 		'retention_days'     => 90,
 		'lookup_private_ips' => false,
 	);
-	$s        = wp_parse_args( $settings, $defaults );
+	$ipq_settings = wp_parse_args( $ipq_raw, $ipq_defaults );
 	?>
 
 	<form method="post" action="">
@@ -29,7 +36,7 @@
 				<th scope="row"><?php esc_html_e( 'Enable Tracking', 'ipquery' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="tracking_enabled" value="1" <?php checked( $s['tracking_enabled'] ); ?>>
+						<input type="checkbox" name="tracking_enabled" value="1" <?php checked( $ipq_settings['tracking_enabled'] ); ?>>
 						<?php esc_html_e( 'Track visitor IPs on every page load', 'ipquery' ); ?>
 					</label>
 					<p class="description"><?php esc_html_e( 'Disable to pause all tracking without deactivating the plugin.', 'ipquery' ); ?></p>
@@ -40,7 +47,7 @@
 				<th scope="row"><?php esc_html_e( 'Track Logged-in Users', 'ipquery' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="track_logged_in" value="1" <?php checked( $s['track_logged_in'] ); ?>>
+						<input type="checkbox" name="track_logged_in" value="1" <?php checked( $ipq_settings['track_logged_in'] ); ?>>
 						<?php esc_html_e( 'Also track visitors who are logged in to WordPress', 'ipquery' ); ?>
 					</label>
 				</td>
@@ -50,7 +57,7 @@
 				<th scope="row"><?php esc_html_e( 'Track Administrators', 'ipquery' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="track_admins" value="1" <?php checked( $s['track_admins'] ); ?>>
+						<input type="checkbox" name="track_admins" value="1" <?php checked( $ipq_settings['track_admins'] ); ?>>
 						<?php esc_html_e( 'Track users with the manage_options capability', 'ipquery' ); ?>
 					</label>
 				</td>
@@ -60,7 +67,7 @@
 				<th scope="row"><?php esc_html_e( 'Look Up Private IPs', 'ipquery' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="lookup_private_ips" value="1" <?php checked( $s['lookup_private_ips'] ); ?>>
+						<input type="checkbox" name="lookup_private_ips" value="1" <?php checked( $ipq_settings['lookup_private_ips'] ); ?>>
 						<?php esc_html_e( 'Send private/LAN IPs to the IpQuery API (useful for testing on localhost)', 'ipquery' ); ?>
 					</label>
 				</td>
@@ -71,7 +78,7 @@
 					<label for="excluded_ips"><?php esc_html_e( 'Excluded IPs', 'ipquery' ); ?></label>
 				</th>
 				<td>
-					<textarea id="excluded_ips" name="excluded_ips" rows="6" class="large-text code"><?php echo esc_textarea( $s['excluded_ips'] ); ?></textarea>
+					<textarea id="excluded_ips" name="excluded_ips" rows="6" class="large-text code"><?php echo esc_textarea( $ipq_settings['excluded_ips'] ); ?></textarea>
 					<p class="description"><?php esc_html_e( 'One IP per line. These IPs will never be tracked.', 'ipquery' ); ?></p>
 				</td>
 			</tr>
@@ -82,7 +89,7 @@
 				</th>
 				<td>
 					<input type="number" id="retention_days" name="retention_days"
-							value="<?php echo esc_attr( (int) $s['retention_days'] ); ?>"
+							value="<?php echo esc_attr( (int) $ipq_settings['retention_days'] ); ?>"
 							min="1" max="3650" class="small-text">
 					<?php esc_html_e( 'days', 'ipquery' ); ?>
 					<p class="description"><?php esc_html_e( 'Visitor records older than this are deleted by the daily cleanup cron.', 'ipquery' ); ?></p>
@@ -148,9 +155,9 @@
 				<tr>
 					<td><?php esc_html_e( 'WP Cron (cleanup)', 'ipquery' ); ?></td>
 					<td>
-						<?php $next = wp_next_scheduled( 'ipquery_daily_cleanup' ); ?>
-						<?php if ( $next ) : ?>
-							<span class="ipquery-badge ipquery-badge--green">✔ <?php echo esc_html( wp_date( 'Y-m-d H:i', $next ) ); ?></span>
+						<?php $ipq_next = wp_next_scheduled( 'ipquery_daily_cleanup' ); ?>
+						<?php if ( $ipq_next ) : ?>
+							<span class="ipquery-badge ipquery-badge--green">✔ <?php echo esc_html( wp_date( 'Y-m-d H:i', $ipq_next ) ); ?></span>
 						<?php else : ?>
 							<span class="ipquery-badge ipquery-badge--orange"><?php esc_html_e( 'Not scheduled', 'ipquery' ); ?></span>
 						<?php endif; ?>

@@ -1,12 +1,25 @@
 <?php
+/**
+ * Admin controller — menus, asset enqueueing, form handlers, and AJAX endpoints.
+ *
+ * @package IpQuery
+ */
 
 defined( 'ABSPATH' ) || exit;
 
 use GuiBranco\IpQuery\IpQueryClient;
 use GuiBranco\IpQuery\IpQueryException;
 
+/**
+ * Registers and handles all WordPress admin functionality for IpQuery.
+ */
 class IpQuery_Admin {
 
+	/**
+	 * Registers all admin hooks.
+	 *
+	 * @return void
+	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( self::class, 'register_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
@@ -17,13 +30,18 @@ class IpQuery_Admin {
 		add_action( 'wp_ajax_ipquery_chart_data', array( self::class, 'ajax_chart_data' ) );
 		add_action( 'wp_ajax_ipquery_heatmap_data', array( self::class, 'ajax_heatmap_data' ) );
 
-		// Daily cleanup cron.
+		// Schedule daily cleanup cron if not already queued.
 		if ( ! wp_next_scheduled( 'ipquery_daily_cleanup' ) ) {
 			wp_schedule_event( time(), 'daily', 'ipquery_daily_cleanup' );
 		}
 		add_action( 'ipquery_daily_cleanup', array( self::class, 'run_cleanup' ) );
 	}
 
+	/**
+	 * Registers the admin menu and sub-pages.
+	 *
+	 * @return void
+	 */
 	public static function register_menu(): void {
 		add_menu_page(
 			__( 'IpQuery', 'ipquery' ),
@@ -60,20 +78,26 @@ class IpQuery_Admin {
 		);
 	}
 
+	/**
+	 * Enqueues styles and scripts on IpQuery admin pages.
+	 *
+	 * @param string $hook Current admin page hook suffix.
+	 * @return void
+	 */
 	public static function enqueue_assets( string $hook ): void {
 		if ( ! str_contains( $hook, 'ipquery' ) ) {
 			return;
 		}
 
-		// Leaflet
+		// Leaflet map library.
 		wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
 		wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
 		wp_enqueue_script( 'leaflet-heat', 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js', array( 'leaflet' ), '0.2.0', true );
 
-		// Chart.js
+		// Chart.js for bar and doughnut charts.
 		wp_enqueue_script( 'chartjs', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js', array(), '4.4.3', true );
 
-		// Plugin assets
+		// Plugin assets.
 		wp_enqueue_style( 'ipquery-admin', IPQUERY_URL . 'assets/css/admin.css', array(), IPQUERY_VERSION );
 		wp_enqueue_script( 'ipquery-maps', IPQUERY_URL . 'assets/js/ipquery-maps.js', array( 'leaflet', 'leaflet-heat', 'jquery' ), IPQUERY_VERSION, true );
 		wp_enqueue_script( 'ipquery-charts', IPQUERY_URL . 'assets/js/ipquery-charts.js', array( 'chartjs', 'jquery' ), IPQUERY_VERSION, true );
@@ -94,6 +118,11 @@ class IpQuery_Admin {
 	// Page callbacks – delegate rendering to view files.
 	// -------------------------------------------------------------------------
 
+	/**
+	 * Renders the dashboard admin page.
+	 *
+	 * @return void
+	 */
 	public static function page_dashboard(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
@@ -101,6 +130,11 @@ class IpQuery_Admin {
 		include IPQUERY_DIR . 'admin/views/dashboard.php';
 	}
 
+	/**
+	 * Renders the visitors admin page.
+	 *
+	 * @return void
+	 */
 	public static function page_visitors(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
@@ -108,6 +142,11 @@ class IpQuery_Admin {
 		include IPQUERY_DIR . 'admin/views/visitors.php';
 	}
 
+	/**
+	 * Renders the settings admin page.
+	 *
+	 * @return void
+	 */
 	public static function page_settings(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
@@ -119,6 +158,11 @@ class IpQuery_Admin {
 	// Settings save handler.
 	// -------------------------------------------------------------------------
 
+	/**
+	 * Validates the settings form nonce and saves options to the database.
+	 *
+	 * @return void
+	 */
 	public static function handle_settings_save(): void {
 		if (
 			! isset( $_POST['ipquery_settings_nonce'] ) ||
@@ -137,7 +181,7 @@ class IpQuery_Admin {
 				'track_logged_in'    => ! empty( $_POST['track_logged_in'] ),
 				'track_admins'       => ! empty( $_POST['track_admins'] ),
 				'excluded_ips'       => sanitize_textarea_field( wp_unslash( $_POST['excluded_ips'] ?? '' ) ),
-				'retention_days'     => max( 1, (int) ( $_POST['retention_days'] ?? 90 ) ),
+				'retention_days'     => max( 1, (int) sanitize_text_field( wp_unslash( $_POST['retention_days'] ?? '90' ) ) ),
 				'lookup_private_ips' => ! empty( $_POST['lookup_private_ips'] ),
 			)
 		);
@@ -154,6 +198,11 @@ class IpQuery_Admin {
 	// Action handlers.
 	// -------------------------------------------------------------------------
 
+	/**
+	 * Handles the delete-single-IP form submission.
+	 *
+	 * @return void
+	 */
 	public static function handle_delete_ip(): void {
 		check_admin_referer( 'ipquery_delete_ip' );
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -167,17 +216,27 @@ class IpQuery_Admin {
 		exit;
 	}
 
+	/**
+	 * Handles the bulk-purge form submission.
+	 *
+	 * @return void
+	 */
 	public static function handle_purge(): void {
 		check_admin_referer( 'ipquery_purge' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
 		}
-		$days    = max( 1, (int) ( $_POST['days'] ?? 90 ) );
+		$days    = max( 1, (int) sanitize_text_field( wp_unslash( $_POST['days'] ?? '90' ) ) );
 		$deleted = IpQuery_DB::delete_old_records( $days );
 		wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&purged=' . $deleted ) );
 		exit;
 	}
 
+	/**
+	 * Handles the manual IP-lookup form submission.
+	 *
+	 * @return void
+	 */
 	public static function handle_manual_lookup(): void {
 		check_admin_referer( 'ipquery_manual_lookup' );
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -224,6 +283,11 @@ class IpQuery_Admin {
 	// AJAX endpoints.
 	// -------------------------------------------------------------------------
 
+	/**
+	 * Returns chart data (countries, risk counts, totals) as JSON.
+	 *
+	 * @return void
+	 */
 	public static function ajax_chart_data(): void {
 		check_ajax_referer( 'ipquery_ajax', 'nonce' );
 		$data = array(
@@ -237,12 +301,22 @@ class IpQuery_Admin {
 		wp_send_json_success( $data );
 	}
 
+	/**
+	 * Returns heatmap coordinate data as JSON.
+	 *
+	 * @return void
+	 */
 	public static function ajax_heatmap_data(): void {
 		check_ajax_referer( 'ipquery_ajax', 'nonce' );
 		$points = IpQuery_DB::get_coordinates_for_heatmap( 500 );
 		wp_send_json_success( $points );
 	}
 
+	/**
+	 * Runs the data-retention cleanup; called by the daily WP-Cron event.
+	 *
+	 * @return void
+	 */
 	public static function run_cleanup(): void {
 		$settings = get_option( 'ipquery_settings', array() );
 		$days     = (int) ( $settings['retention_days'] ?? 90 );

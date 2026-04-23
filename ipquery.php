@@ -14,6 +14,8 @@
  *
  * Bundled library:   guibranco/ipquery-php (MIT License)
  * Library URI:       https://github.com/guibranco/ipquery-php
+ *
+ * @package IpQuery
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -39,6 +41,11 @@ register_activation_hook( IPQUERY_FILE, array( 'IpQuery_DB', 'install' ) );
 register_deactivation_hook( IPQUERY_FILE, array( 'IpQuery_DB', 'deactivate' ) );
 register_uninstall_hook( IPQUERY_FILE, 'ipquery_uninstall' );
 
+/**
+ * Removes all plugin data on uninstall.
+ *
+ * @return void
+ */
 function ipquery_uninstall(): void {
 	IpQuery_DB::uninstall();
 	delete_option( 'ipquery_settings' );
@@ -46,6 +53,12 @@ function ipquery_uninstall(): void {
 }
 
 add_action( 'init', 'ipquery_init' );
+
+/**
+ * Boots the tracker when tracking is enabled.
+ *
+ * @return void
+ */
 function ipquery_init(): void {
 	$settings = get_option( 'ipquery_settings', array() );
 	if ( ! empty( $settings['tracking_enabled'] ) ) {

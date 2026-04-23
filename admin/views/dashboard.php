@@ -1,4 +1,11 @@
-<?php defined( 'ABSPATH' ) || exit; ?>
+<?php
+/**
+ * Dashboard admin view — stat cards, heatmap, and charts.
+ *
+ * @package IpQuery
+ */
+
+defined( 'ABSPATH' ) || exit; ?>
 
 <div class="wrap ipquery-wrap">
 	<h1 class="wp-heading-inline">
@@ -197,15 +204,15 @@
 				);
 				foreach ( $risk_items as $item ) :
 					?>
-				<div class="ipquery-risk-item ipquery-risk-item--<?php echo esc_attr( $item['class'] ); ?>">
-					<span class="dashicons dashicons-<?php echo esc_attr( $item['icon'] ); ?>"></span>
-					<strong><?php echo esc_html( number_format_i18n( $item['count'] ) ); ?></strong>
-					<small><?php echo esc_html( $item['label'] ); ?></small>
-					<?php if ( $unique_ips > 0 ) : ?>
-					<span class="ipquery-pct"><?php echo esc_html( round( ( $item['count'] / $unique_ips ) * 100, 1 ) ); ?>%</span>
-					<?php endif; ?>
-				</div>
-				<?php endforeach; ?>
+			<div class="ipquery-risk-item ipquery-risk-item--<?php echo esc_attr( $item['class'] ); ?>">
+				<span class="dashicons dashicons-<?php echo esc_attr( $item['icon'] ); ?>"></span>
+				<strong><?php echo esc_html( number_format_i18n( $item['count'] ) ); ?></strong>
+				<small><?php echo esc_html( $item['label'] ); ?></small>
+				<?php if ( $unique_ips > 0 ) : ?>
+				<span class="ipquery-pct"><?php echo esc_html( round( ( $item['count'] / $unique_ips ) * 100, 1 ) ); ?>%</span>
+				<?php endif; ?>
+			</div>
+			<?php endforeach; ?>
 			</div>
 		</div>
 	</div>
