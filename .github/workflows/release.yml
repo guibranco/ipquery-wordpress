@@ -52,7 +52,7 @@ jobs:
     if: needs.version.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -85,7 +85,7 @@ jobs:
     if: needs.version.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
@@ -101,7 +101,7 @@ jobs:
     needs: [version, test, plugin-check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           # Use a PAT with workflow scope so the version-bump push can be made.
