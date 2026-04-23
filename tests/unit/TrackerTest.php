@@ -90,9 +90,10 @@ class TrackerTest extends TestCase {
     // -------------------------------------------------------------------------
 
     public function test_maybe_track_skips_ajax_requests(): void {
+        $this->expectNotToPerformAssertions();
+
         Functions\when( 'wp_doing_ajax' )->justReturn( true );
         Functions\when( 'wp_doing_cron' )->justReturn( false );
-
         Functions\expect( 'is_user_logged_in' )->never();
 
         IpQuery_Tracker::init( ['tracking_enabled' => true] );
@@ -100,9 +101,10 @@ class TrackerTest extends TestCase {
     }
 
     public function test_maybe_track_skips_cron_requests(): void {
+        $this->expectNotToPerformAssertions();
+
         Functions\when( 'wp_doing_ajax' )->justReturn( false );
         Functions\when( 'wp_doing_cron' )->justReturn( true );
-
         Functions\expect( 'is_user_logged_in' )->never();
 
         IpQuery_Tracker::init( ['tracking_enabled' => true] );
@@ -110,6 +112,8 @@ class TrackerTest extends TestCase {
     }
 
     public function test_maybe_track_skips_ip_on_exclusion_list(): void {
+        $this->expectNotToPerformAssertions();
+
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
 
         Functions\when( 'wp_doing_ajax' )->justReturn( false );
@@ -126,6 +130,8 @@ class TrackerTest extends TestCase {
     }
 
     public function test_maybe_track_skips_private_ip_when_setting_off(): void {
+        $this->expectNotToPerformAssertions();
+
         $_SERVER['REMOTE_ADDR'] = '192.168.1.100';
 
         Functions\when( 'wp_doing_ajax' )->justReturn( false );
