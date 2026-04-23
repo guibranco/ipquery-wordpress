@@ -89,13 +89,13 @@ class IpQuery_Admin {
 			return;
 		}
 
-		// Leaflet map library.
-		wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', array(), '1.9.4' );
-		wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', array(), '1.9.4', true );
-		wp_enqueue_script( 'leaflet-heat', 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js', array( 'leaflet' ), '0.2.0', true );
+		// Leaflet map library (bundled).
+		wp_enqueue_style( 'leaflet', IPQUERY_URL . 'assets/css/leaflet.min.css', array(), '1.9.4' );
+		wp_enqueue_script( 'leaflet', IPQUERY_URL . 'assets/js/leaflet.min.js', array(), '1.9.4', true );
+		wp_enqueue_script( 'leaflet-heat', IPQUERY_URL . 'assets/js/leaflet-heat.js', array( 'leaflet' ), '0.2.0', true );
 
-		// Chart.js for bar and doughnut charts.
-		wp_enqueue_script( 'chartjs', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js', array(), '4.4.3', true );
+		// Chart.js for bar and doughnut charts (bundled).
+		wp_enqueue_script( 'chartjs', IPQUERY_URL . 'assets/js/chart.umd.min.js', array(), '4.4.3', true );
 
 		// Plugin assets.
 		wp_enqueue_style( 'ipquery-admin', IPQUERY_URL . 'assets/css/admin.css', array(), IPQUERY_VERSION );
