@@ -96,7 +96,7 @@ jobs:
             --exclude='.gitignore'     \
             --exclude='docs'           \
             --exclude='tests'          \
-            --exclude='vendor'         \
+            --exclude='/vendor'         \
             --exclude='composer.json'  \
             --exclude='composer.lock'  \
             --exclude='phpunit.xml'    \
