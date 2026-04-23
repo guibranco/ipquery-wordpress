@@ -10,17 +10,15 @@ permissions:
 jobs:
   # ---------------------------------------------------------------------------
   # Determine the next semantic version from git history + tags.
-  # Skip entirely if this push is already a version-bump commit.
   # ---------------------------------------------------------------------------
   version:
     name: Determine Version
     runs-on: ubuntu-latest
     outputs:
       semVer: ${{ steps.gitversion.outputs.semVer }}
-      tag_exists: ${{ steps.check_tag.outputs.exists }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -33,26 +31,15 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v4.5.0
 
-      - name: Check whether release tag already exists
-        id: check_tag
-        run: |
-          VERSION="${{ steps.gitversion.outputs.semVer }}"
-          if git ls-remote --tags origin | grep -q "refs/tags/v${VERSION}$"; then
-            echo "exists=true"  >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-
   # ---------------------------------------------------------------------------
-  # PHP syntax check + PHPCS + PHPUnit (skipped if tag already exists)
+  # PHP syntax check + PHPCS + PHPUnit
   # ---------------------------------------------------------------------------
   test:
     name: Tests
     needs: version
-    if: needs.version.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -77,15 +64,14 @@ jobs:
         run: vendor/bin/phpunit
 
   # ---------------------------------------------------------------------------
-  # WordPress Plugin Check (skipped if tag already exists)
+  # WordPress Plugin Check
   # ---------------------------------------------------------------------------
   plugin-check:
     name: WP Plugin Check
     needs: version
-    if: needs.version.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Stage plugin under its slug directory
         run: |
@@ -114,14 +100,16 @@ jobs:
           build-dir: /tmp/ipquery
 
   # ---------------------------------------------------------------------------
-  # Bump version files, tag, build release zip, publish GitHub Release
+  # Bump version files, tag, build release zip, publish GitHub Release.
+  # The version-bump commit includes [skip ci] so this workflow is not
+  # re-triggered by the bot's own push back to main.
   # ---------------------------------------------------------------------------
   release:
     name: Release
     needs: [version, test, plugin-check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # Use a PAT with workflow scope so the version-bump push can be made.
@@ -141,16 +129,23 @@ jobs:
           sed -i "s/define( 'IPQUERY_VERSION',[^)]*)/define( 'IPQUERY_VERSION', '${VERSION}' )/" ipquery.php
           sed -i "s/^Stable tag:.*/Stable tag: ${VERSION}/" readme.txt
 
-      - name: Commit version bump and create tag
+      - name: Commit version bump, tag, and push
         env:
           VERSION: ${{ needs.version.outputs.semVer }}
         run: |
           git add ipquery.php readme.txt
-          # Only commit if something actually changed.
+          # Commit only when the version files actually changed.
           git diff --cached --quiet \
-            || git commit -m "chore: bump version to ${VERSION}"
-          git tag "v${VERSION}"
-          git push origin main "v${VERSION}"
+            || git commit -m "chore: bump version to ${VERSION} [skip ci]"
+
+          # Create and push the tag only if it does not already exist remotely.
+          if git ls-remote --tags origin | grep -q "refs/tags/v${VERSION}$"; then
+            echo "Tag v${VERSION} already exists — pushing commits only."
+            git push origin main
+          else
+            git tag "v${VERSION}"
+            git push origin main "v${VERSION}"
+          fi
 
       - name: Build release zip
         env:
@@ -176,7 +171,7 @@ jobs:
           echo "ZIP=/tmp/ipquery-${VERSION}.zip" >> "$GITHUB_ENV"
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.version.outputs.semVer }}
           name: IpQuery v${{ needs.version.outputs.semVer }}
