@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers IpQuery_DB
- */
+#[CoversClass(IpQuery_DB::class)]
 class DbTest extends TestCase {
 
     protected function setUp(): void {
@@ -34,23 +33,25 @@ class DbTest extends TestCase {
     // -------------------------------------------------------------------------
 
     private function makeWpdb(): object {
-        $wpdb         = new stdClass();
-        $wpdb->prefix = 'wp_';
+        return new class {
+            public string $prefix = 'wp_';
 
-        $wpdb->prepare = static function ( string $query, ...$args ): string {
-            return $query; // Return query as-is for testing.
-        };
-        $wpdb->get_results = static function ( string $query, string $output = ARRAY_A ): array {
-            return [];
-        };
-        $wpdb->get_var = static function ( string $query ): string {
-            return '0';
-        };
-        $wpdb->esc_like = static function ( string $text ): string {
-            return addcslashes( $text, '_%\\' );
-        };
+            public function prepare( string $query, ...$args ): string {
+                return $query;
+            }
 
-        return $wpdb;
+            public function get_results( string $query, string $output = ARRAY_A ): array {
+                return [];
+            }
+
+            public function get_var( string $query ): string {
+                return '0';
+            }
+
+            public function esc_like( string $text ): string {
+                return addcslashes( $text, '_%\\' );
+            }
+        };
     }
 
     public function test_get_visitors_returns_rows_and_total_keys(): void {
@@ -88,18 +89,28 @@ class DbTest extends TestCase {
     }
 
     public function test_get_visitors_falls_back_to_last_seen_for_invalid_orderby(): void {
-        $capturedQuery = '';
+        $wpdb = new class {
+            public string $prefix      = 'wp_';
+            public string $lastQuery   = '';
 
-        $wpdb             = new stdClass();
-        $wpdb->prefix     = 'wp_';
-        $wpdb->prepare    = static function ( string $query, ...$args ) use ( &$capturedQuery ): string {
-            $capturedQuery = $query;
-            return $query;
+            public function prepare( string $query, ...$args ): string {
+                $this->lastQuery = $query;
+                return $query;
+            }
+
+            public function get_results( string $query, string $output = ARRAY_A ): array {
+                return [];
+            }
+
+            public function get_var( string $query ): string {
+                return '0';
+            }
+
+            public function esc_like( string $text ): string {
+                return $text;
+            }
         };
-        $wpdb->get_results = static function (): array { return []; };
-        $wpdb->get_var     = static function (): string { return '0'; };
-        $wpdb->esc_like    = static function ( string $t ): string { return $t; };
-        $GLOBALS['wpdb']  = $wpdb;
+        $GLOBALS['wpdb'] = $wpdb;
 
         Functions\when( 'wp_parse_args' )->alias(
             static function ( array $args, array $defaults ): array {
@@ -109,23 +120,33 @@ class DbTest extends TestCase {
 
         IpQuery_DB::get_visitors( ['orderby' => 'malicious_column; DROP TABLE--'] );
 
-        $this->assertStringContainsString( 'last_seen', $capturedQuery );
-        $this->assertStringNotContainsString( 'malicious_column', $capturedQuery );
+        $this->assertStringContainsString( 'last_seen', $wpdb->lastQuery );
+        $this->assertStringNotContainsString( 'malicious_column', $wpdb->lastQuery );
     }
 
     public function test_get_visitors_sanitises_order_direction(): void {
-        $capturedQuery = '';
+        $wpdb = new class {
+            public string $prefix    = 'wp_';
+            public string $lastQuery = '';
 
-        $wpdb             = new stdClass();
-        $wpdb->prefix     = 'wp_';
-        $wpdb->prepare    = static function ( string $query, ...$args ) use ( &$capturedQuery ): string {
-            $capturedQuery = $query;
-            return $query;
+            public function prepare( string $query, ...$args ): string {
+                $this->lastQuery = $query;
+                return $query;
+            }
+
+            public function get_results( string $query, string $output = ARRAY_A ): array {
+                return [];
+            }
+
+            public function get_var( string $query ): string {
+                return '0';
+            }
+
+            public function esc_like( string $text ): string {
+                return $text;
+            }
         };
-        $wpdb->get_results = static function (): array { return []; };
-        $wpdb->get_var     = static function (): string { return '0'; };
-        $wpdb->esc_like    = static function ( string $t ): string { return $t; };
-        $GLOBALS['wpdb']  = $wpdb;
+        $GLOBALS['wpdb'] = $wpdb;
 
         Functions\when( 'wp_parse_args' )->alias(
             static function ( array $args, array $defaults ): array {
@@ -135,7 +156,7 @@ class DbTest extends TestCase {
 
         IpQuery_DB::get_visitors( ['order' => 'INVALID; DROP TABLE--'] );
 
-        $this->assertStringContainsString( ' DESC', $capturedQuery );
-        $this->assertStringNotContainsString( 'INVALID', $capturedQuery );
+        $this->assertStringContainsString( ' DESC', $wpdb->lastQuery );
+        $this->assertStringNotContainsString( 'INVALID', $wpdb->lastQuery );
     }
 }
