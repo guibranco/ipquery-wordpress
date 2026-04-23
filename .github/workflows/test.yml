@@ -71,7 +71,7 @@ jobs:
 
       - name: Stage plugin under its slug directory
         run: |
-          mkdir -p /tmp/plugin-build/ipquery
+          mkdir -p /tmp/ipquery
           rsync -a \
             --exclude='.git'           \
             --exclude='.github'        \
@@ -85,11 +85,11 @@ jobs:
             --exclude='phpcs.xml'      \
             --exclude='GitVersion.yml' \
             --exclude='README.md'      \
-            ./ /tmp/plugin-build/ipquery/
+            ./ /tmp/ipquery/
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wp-version: 'latest'
-          build-dir: /tmp/plugin-build
+          build-dir: /tmp/ipquery
