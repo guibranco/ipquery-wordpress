@@ -82,7 +82,7 @@ jobs:
           VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
           mkdir -p /tmp/ipquery
-          git archive HEAD --format=zip --prefix=ipquery/ --output="/tmp/ipquery-${VERSION}.zip"
+          git archive HEAD | tar -x -C /tmp/ipquery
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
