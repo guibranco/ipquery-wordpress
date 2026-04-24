@@ -72,7 +72,7 @@ jobs:
       - name: Stage plugin under its slug directory
         run: |
           mkdir -p /tmp/ipquery
-          git archive HEAD | tar -x -C /tmp/ipquery
+          git archive HEAD --format=zip --prefix=ipquery/ --output="/tmp/ipquery.zip"
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
