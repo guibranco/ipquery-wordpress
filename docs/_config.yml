@@ -13,8 +13,6 @@ remote_theme: just-the-docs/just-the-docs@v0.12.0
 url: https://guilherme.stracini.com.br
 baseurl: /ipquery-wordpress
 
-color_scheme: dark
-
 # Favicon & logo (drop the files in docs/assets/images/)
 favicon_ico: /assets/images/favicon.ico
 # logo: /assets/images/logo.png
@@ -64,7 +62,7 @@ last_edit_time_format: "%b %e %Y at %I:%M %p UTC"
 # ----------------------------------------------------------------------
 #  Color scheme — light by default, toggle to dark
 # ----------------------------------------------------------------------
-color_scheme: light
+color_scheme: dark
 enable_copy_code_button: true
 
 # ----------------------------------------------------------------------
