@@ -239,28 +239,33 @@ class IpQuery_Admin {
 
 		$deleted = IpQuery_DB::delete_by_country( $country_code );
 
-		if ( $deleted !== false ) {
-			
-			IpQuery_DB::log_action(
-				sprintf(
-					'Admin "%s" deleted %d visitor record(s) for country: %s',
-					wp_get_current_user()->user_login,
-					(int) $deleted,
-					$country_code
-				)
+		if ( false === $deleted ) {
+			wp_safe_redirect(
+				admin_url( 'admin.php?page=ipquery-visitors&country_delete_error=1' )
 			);
+			exit;
 		}
+
+		IpQuery_DB::log_action(
+			sprintf(
+				'Admin "%s" deleted %d visitor record(s) for country: %s',
+				wp_get_current_user()->user_login,
+				(int) $deleted,
+				$country_code
+			)
+		);
+
+		$deleted_param = (string) (int) $deleted;
 
 		wp_safe_redirect(
 			admin_url(
 				'admin.php?page=ipquery-visitors'
-				. '&country_deleted=' . (int) $deleted
+				. '&country_deleted=' . $deleted_param
 				. '&country_code=' . rawurlencode( $country_code )
 			)
 		);
 		exit;
 	}
-
 	
 
 	/**
