@@ -305,4 +305,49 @@ class IpQuery_DB {
 		$table = $wpdb->prefix . IPQUERY_TABLE;
 		$wpdb->delete( $table, array( 'ip' => $ip ), array( '%s' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
+	
+	/**
+	 * Writes an audit message to the WordPress debug log when WP_DEBUG_LOG is enabled.
+	 *
+	 * @param string $message The message to log.
+	 * @return void
+	 */
+	public static function log_action( string $message ): void {
+		if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( '[IpQuery] ' . $message );
+		}
+	}
+
+	/**
+	 * Delete all visitor records for a given country code.
+	 *
+	 * @param string $country_code Two-letter ISO country code (e.g. 'DE').
+	 * @return int|false Number of rows deleted, or false on error.
+	 */
+	public static function delete_by_country( string $country_code ) : int|false {
+		global $wpdb;
+		$table = $wpdb->prefix . IPQUERY_TABLE;
+		return $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$table,
+			array( 'country_code' => sanitize_text_field( $country_code ) ),
+			array( '%s' )
+		);
+	}
+
+	/**
+	 * Returns distinct countries that have visitor records, for the deletion dropdown.
+	 *
+	 * @return array<int,array{country:string,country_code:string}>
+	 */
+	public static function get_distinct_countries(): array {
+		global $wpdb;
+		$table  = $wpdb->prefix . IPQUERY_TABLE;
+		$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT DISTINCT country, country_code FROM {$table} WHERE country_code IS NOT NULL AND country_code != '' ORDER BY country ASC",
+			ARRAY_A
+		);
+		return is_array( $result ) ? $result : array();
+	}	
+
 }
