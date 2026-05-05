@@ -7,7 +7,7 @@
  * Requires at least: 6.0
  * Requires PHP:      8.2
  * Author:            Guilherme Branco Stracini
- * Author URI:        https://github.com/guibranco
+ * Author URI:        https://guilherme.stracini.com.br
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       ipquery
