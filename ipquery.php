@@ -3,11 +3,11 @@
  * Plugin Name:       IpQuery
  * Plugin URI:        https://guilherme.stracini.com.br/ipquery-wordpress/
  * Description:       Track and analyse visitor IP data using the IpQuery API (via guibranco/ipquery-php). Displays location maps, traffic heatmaps, and VPN/proxy statistics.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Requires at least: 6.0
  * Requires PHP:      8.2
  * Author:            Guilherme Branco Stracini
- * Author URI:        https://github.com/guibranco
+ * Author URI:        https://guilherme.stracini.com.br
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       ipquery
@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'IPQUERY_VERSION', '1.0.4' );
+define( 'IPQUERY_VERSION', '1.0.5' );
 define( 'IPQUERY_FILE', __FILE__ );
 define( 'IPQUERY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IPQUERY_URL', plugin_dir_url( __FILE__ ) );
