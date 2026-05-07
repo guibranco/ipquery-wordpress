@@ -31,8 +31,8 @@ defined( 'ABSPATH' ) || exit; ?>
 		$ipquery_deleted_country = esc_html( strtoupper( sanitize_text_field( wp_unslash( $_GET['country_code'] ?? '' ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		printf(
 			'<div class="notice notice-success is-dismissible"><p>' . esc_html(
-				// translators: %1$d is the number of records deleted, %2$s is the country code.
 				sprintf(
+					// translators: %1$d is the number of records deleted, %2$s is the country code.
 					_n(
 						'%1$d record deleted for country: %2$s.',
 						'%1$d records deleted for country: %2$s.',

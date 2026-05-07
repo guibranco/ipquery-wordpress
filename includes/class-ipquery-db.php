@@ -305,7 +305,7 @@ class IpQuery_DB {
 		$table = $wpdb->prefix . IPQUERY_TABLE;
 		$wpdb->delete( $table, array( 'ip' => $ip ), array( '%s' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
-	
+
 	/**
 	 * Writes an audit message to the WordPress debug log when WP_DEBUG_LOG is enabled.
 	 *
@@ -325,7 +325,7 @@ class IpQuery_DB {
 	 * @param string $country_code Two-letter ISO country code (e.g. 'DE').
 	 * @return int|false Number of rows deleted, or false on error.
 	 */
-	public static function delete_by_country( string $country_code ) : int|false {
+	public static function delete_by_country( string $country_code ): int|false {
 		global $wpdb;
 		$table = $wpdb->prefix . IPQUERY_TABLE;
 		return $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -343,11 +343,7 @@ class IpQuery_DB {
 	public static function get_distinct_countries(): array {
 		global $wpdb;
 		$table  = $wpdb->prefix . IPQUERY_TABLE;
-		$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT DISTINCT country, country_code FROM {$table} WHERE country_code IS NOT NULL AND country_code != '' ORDER BY country ASC",
-			ARRAY_A
-		);
+		$result = $wpdb->get_results( "SELECT DISTINCT country, country_code FROM {$table} WHERE country_code IS NOT NULL AND country_code != '' ORDER BY country ASC", ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		return is_array( $result ) ? $result : array();
-	}	
-
+	}
 }

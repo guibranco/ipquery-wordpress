@@ -266,7 +266,6 @@ class IpQuery_Admin {
 		);
 		exit;
 	}
-	
 
 	/**
 	 * Handles the bulk-purge form submission.
