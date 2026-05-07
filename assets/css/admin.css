@@ -232,3 +232,8 @@
         flex-direction: column;
     }
 }
+
+
+.ipquery-panel--spaced {
+    margin-top: 24px;
+}

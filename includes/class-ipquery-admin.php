@@ -25,6 +25,7 @@ class IpQuery_Admin {
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
 		add_action( 'admin_init', array( self::class, 'handle_settings_save' ) );
 		add_action( 'admin_post_ipquery_delete_ip', array( self::class, 'handle_delete_ip' ) );
+		add_action( 'admin_post_ipquery_delete_by_country', array( self::class, 'handle_delete_by_country' ) );
 		add_action( 'admin_post_ipquery_purge', array( self::class, 'handle_purge' ) );
 		add_action( 'admin_post_ipquery_lookup', array( self::class, 'handle_manual_lookup' ) );
 		add_action( 'wp_ajax_ipquery_chart_data', array( self::class, 'ajax_chart_data' ) );
@@ -213,6 +214,56 @@ class IpQuery_Admin {
 			IpQuery_DB::delete_ip( $ip );
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&deleted=1' ) );
+		exit;
+	}
+
+	/**
+	 * Handles the delete-by-country form submission.
+	 *
+	 * @return void
+	 */
+	public static function handle_delete_by_country(): void {
+		check_admin_referer( 'ipquery_delete_by_country' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
+		}
+
+		$country_code = strtoupper(
+			sanitize_text_field( wp_unslash( $_POST['country_code'] ?? '' ) )
+		);
+
+		if ( empty( $country_code ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors' ) );
+			exit;
+		}
+
+		$deleted = IpQuery_DB::delete_by_country( $country_code );
+
+		if ( false === $deleted ) {
+			wp_safe_redirect(
+				admin_url( 'admin.php?page=ipquery-visitors&country_delete_error=1' )
+			);
+			exit;
+		}
+
+		IpQuery_DB::log_action(
+			sprintf(
+				'Admin "%s" deleted %d visitor record(s) for country: %s',
+				wp_get_current_user()->user_login,
+				(int) $deleted,
+				$country_code
+			)
+		);
+
+		$deleted_param = (string) (int) $deleted;
+
+		wp_safe_redirect(
+			admin_url(
+				'admin.php?page=ipquery-visitors'
+				. '&country_deleted=' . $deleted_param
+				. '&country_code=' . rawurlencode( $country_code )
+			)
+		);
 		exit;
 	}
 

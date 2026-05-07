@@ -26,6 +26,26 @@ defined( 'ABSPATH' ) || exit; ?>
 	elseif ( isset( $_GET['lookup_error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// translators: %s is the error message returned by the lookup.
 		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html( sprintf( __( 'Lookup error: %s', 'ipquery' ), urldecode( sanitize_text_field( wp_unslash( $_GET['lookup_error'] ) ) ) ) ) . '</p></div>'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	elseif ( isset( $_GET['country_deleted'] ) && 'false' !== $_GET['country_deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$ipquery_deleted_count   = (int) $_GET['country_deleted']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$ipquery_deleted_country = esc_html( strtoupper( sanitize_text_field( wp_unslash( $_GET['country_code'] ?? '' ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		printf(
+			'<div class="notice notice-success is-dismissible"><p>' . esc_html(
+				sprintf(
+					// translators: %1$d is the number of records deleted, %2$s is the country code.
+					_n(
+						'%1$d record deleted for country: %2$s.',
+						'%1$d records deleted for country: %2$s.',
+						$ipquery_deleted_count,
+						'ipquery'
+					),
+					$ipquery_deleted_count,
+					$ipquery_deleted_country
+				)
+			) . '</p></div>'
+		);
+	elseif ( isset( $_GET['country_delete_error'] ) || ( isset( $_GET['country_deleted'] ) && 'false' === $_GET['country_deleted'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Failed to delete records. Please try again.', 'ipquery' ) . '</p></div>';
 	endif;
 	?>
 
@@ -249,5 +269,45 @@ defined( 'ABSPATH' ) || exit; ?>
 			<?php submit_button( __( 'Purge', 'ipquery' ), 'secondary', 'purge_btn', false ); ?>
 		</form>
 	</div>
+
+	<!-- Delete by Country -->
+	<div class="ipquery-panel ipquery-panel--spaced">
+		<h3><?php esc_html_e( 'Delete by Country', 'ipquery' ); ?></h3>
+		<p><?php esc_html_e( 'Permanently delete all visitor records from a specific country (GDPR right-to-erasure).', 'ipquery' ); ?></p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'ipquery_delete_by_country' ); ?>
+			<input type="hidden" name="action" value="ipquery_delete_by_country">
+			<label>
+				<?php esc_html_e( 'Country:', 'ipquery' ); ?>
+				<select name="country_code" required>
+					<option value=""><?php esc_html_e( '— Select a country —', 'ipquery' ); ?></option>
+					<?php
+					// Fetch distinct countries that actually have records.
+					$ipquery_countries = IpQuery_DB::get_distinct_countries();
+					foreach ( $ipquery_countries as $ipquery_country ) :
+						if ( empty( $ipquery_country['country_code'] ) ) {
+							continue;
+						}
+						?>
+					<option value="<?php echo esc_attr( $ipquery_country['country_code'] ); ?>">
+						<?php echo esc_html( $ipquery_country['country'] . ' (' . $ipquery_country['country_code'] . ')' ); ?>
+					</option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+			<?php
+			submit_button(
+				__( 'Delete Records', 'ipquery' ),
+				'secondary',
+				'delete_country_btn',
+				false,
+				array(
+					'onclick' => "return confirm('" . esc_js( __( 'Are you sure? This will permanently delete ALL visitor records from the selected country. This cannot be undone.', 'ipquery' ) ) . "')",
+				)
+			);
+			?>
+		</form>
+	</div>
+
 
 </div>
