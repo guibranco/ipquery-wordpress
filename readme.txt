@@ -1,5 +1,5 @@
 === IpQuery ===
-Contributors: guibranco
+Contributors: guilhermestracini
 Tags: ip, geolocation, analytics, security, heatmap
 Requires at least: 6.0
 Tested up to: 6.9
