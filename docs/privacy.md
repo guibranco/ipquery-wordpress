@@ -57,6 +57,7 @@ You should reference `ipquery.io` in your privacy policy as a sub-processor if y
 | **Data retention** | Settings → Data Retention | Records older than N days are auto-deleted |
 | **Manual delete** | Visitors screen → Delete | Removes a single IP record immediately |
 | **Bulk purge** | Visitors screen → Purge Old Records | Removes all records older than N days immediately |
+| **Delete by country** | Visitors screen → Delete by Country | Bulk-removes all records from one or more selected countries; requires confirmation; action is logged |
 
 ---
 
