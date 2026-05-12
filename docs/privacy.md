@@ -75,6 +75,21 @@ If you use this plugin, consider adding a clause similar to the following to you
 
 ---
 
+## GDPR right-to-erasure by country
+
+The **Delete by Country** tool on the Visitors screen is designed specifically for right-to-erasure (Article 17 GDPR) workflows where a data protection authority or your own DPA policy requires you to remove all data relating to residents of a particular country or jurisdiction.
+
+Key properties of the tool:
+
+- **Targeted** — selects records by the `country_code` field stored from the IpQuery API response; only countries with stored records are shown.
+- **Bulk** — a single operation removes all matching records across as many countries as you select.
+- **Safe** — a mandatory confirmation dialog shows the affected countries and record count before any data is deleted.
+- **Auditable** — every deletion is written to the plugin action log (`IpQuery → Logs`) with the operator identity, country list, record count, and UTC timestamp.
+
+See [Deleting records by country]({% link visitors.md %}#deleting-records-by-country) for step-by-step instructions.
+
+---
+
 ## WordPress Privacy Tools integration
 
 The plugin does not currently register itself with the WordPress core privacy tools (`wp_privacy_send_personal_data_export_requests` / `wp_privacy_personal_data_erasure_fulfilled`). If you need to support data export and erasure requests, you can query and delete records programmatically:
@@ -89,6 +104,12 @@ $rows  = $wpdb->get_results(
 
 // Delete records for an IP
 IpQuery_DB::delete_ip( $user_ip );
+
+// Delete all records for a country (ISO alpha-2 code)
+IpQuery_DB::delete_by_country( 'DE' );
+
+// Delete records for multiple countries at once
+IpQuery_DB::delete_by_countries( [ 'DE', 'FR', 'IT' ] );
 ```
 
-Support for native WordPress privacy tools is planned for a future release.
+Support for native WordPress privacy tools (data export and per-user erasure requests via the admin UI) is planned for a future release.
