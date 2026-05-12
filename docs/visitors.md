@@ -70,6 +70,43 @@ Purging is irreversible. The deleted records cannot be recovered.
 
 ---
 
+## Deleting records by country
+
+The **Delete by Country** tool supports GDPR right-to-erasure workflows by removing all stored visitor records that originate from one or more specific countries.
+
+### How to use it
+
+1. In the **Delete by Country** section at the bottom of the Visitors screen, select one or more countries from the dropdown. Countries are listed by name alongside their ISO 3166-1 alpha-2 code and the current number of records stored for each.
+2. Click **Delete Selected Countries**.
+3. A confirmation dialog appears showing the number of records that will be deleted and the countries affected. Confirm to proceed or cancel to abort.
+4. On confirmation, all matching records are permanently deleted and a success notice is displayed with the total count removed.
+
+### Bulk deletion
+
+You can select multiple countries in a single operation. All records matching any of the selected countries are deleted in one database transaction.
+
+### Audit log
+
+Every country-filter deletion is written to the plugin's action log with:
+
+| Field | Value |
+|---|---|
+| **Action** | `delete_by_country` |
+| **Countries** | Comma-separated list of ISO country codes deleted |
+| **Records deleted** | Total row count removed |
+| **Performed by** | WordPress user ID and display name |
+| **Timestamp** | UTC date and time of the operation |
+
+The log is accessible under **IpQuery → Logs** and is retained for 90 days.
+
+{: .warning }
+Country-filter deletion is irreversible. All records for the selected countries are permanently removed and cannot be recovered.
+
+{: .note }
+The country dropdown only lists countries for which at least one record is currently stored. If a country does not appear, no records exist for it.
+
+---
+
 ## Pagination
 
 Results are paginated at 25 records per page. Pagination links appear below the table when the result set exceeds one page. Sorting and filter parameters are preserved across page navigation.
