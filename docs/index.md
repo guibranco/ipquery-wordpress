@@ -26,6 +26,7 @@ Track and analyse visitor IP data directly from your WordPress admin panel — s
 | **Smart caching** | WordPress transients cache each IP lookup for 1 hour — one API call per IP per hour |
 | **Data retention** | Configurable retention period with automatic daily cleanup via WP-Cron |
 | **Privacy controls** | Exclude IPs, skip logged-in users or admins, and disable tracking at any time |
+| **GDPR erasure by country** | Bulk-delete all visitor records for one or more countries; confirmation dialog and audit log included |
 
 ## Powered by ipquery-php
 
