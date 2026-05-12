@@ -26,6 +26,7 @@ IpQuery enriches every visitor's IP address with real-time geolocation, ISP data
 * **Smart caching** — WordPress transients cache each IP for 1 hour; only one API call per IP per hour
 * **Auto-retention** — Configurable data retention with daily WP-Cron cleanup
 * **Privacy controls** — Exclude IPs, skip logged-in users or admins, disable tracking at any time
+* **GDPR erasure tools** — Delete individual visitor records or bulk-erase all data for a specific country
 
 == Installation ==
 
@@ -50,7 +51,11 @@ For each unique visitor IP the plugin stores: country, city, state, latitude/lon
 
 = Is this GDPR compliant? =
 
-The plugin provides controls to help you comply with GDPR (disable tracking, exclude IPs, set data retention, delete individual records). You are responsible for assessing compliance in your jurisdiction and updating your privacy policy accordingly.
+The plugin provides controls to help you comply with GDPR (disable tracking, exclude IPs, set data retention, delete individual records, and bulk-delete all records for a given country). You are responsible for assessing compliance in your jurisdiction and updating your privacy policy accordingly.
+
+= How do I erase all data for visitors from a specific country? =
+
+Navigate to **IpQuery → Settings → GDPR Erasure**, select the country from the dropdown, and confirm the deletion. All visitor records matching that country code will be removed from the `wp_ipquery_visitors` table, and the corresponding cached transients will be flushed.
 
 = Where is data stored? =
 
@@ -61,13 +66,30 @@ All data is stored in your own WordPress database in the `wp_ipquery_visitors` t
 1. Dashboard — stat cards, world heatmap, and top countries chart
 2. Visitors — searchable and sortable visitor log with enrichment data
 3. Settings — tracking options, data retention, and excluded IPs
+4. GDPR erasure — country-based bulk deletion tool
 
 == Changelog ==
+
+= 1.1.1 =
+* Maintenance and bug fixes
+
+= 1.1.0 =
+* Added country-based data deletion for GDPR erasure — bulk-delete all visitor records for a selected country directly from the admin panel
+* New **GDPR Erasure** section under **IpQuery → Settings** with a country picker and confirmation step
+* Cached transients are flushed for affected IPs after a country-based erasure
+* New `ipquery_before_country_erasure` and `ipquery_after_country_erasure` action hooks for extensibility
+* Updated Privacy & GDPR documentation to reflect the new erasure workflow
 
 = 1.0.0 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Maintenance release. Safe to upgrade.
+
+= 1.1.0 =
+Adds country-based bulk data deletion to support GDPR right-to-erasure requests. Recommended for any site processing EU visitor data.
 
 = 1.0.0 =
 Initial release.
