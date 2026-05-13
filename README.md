@@ -7,7 +7,7 @@
 A WordPress plugin that enriches visitor IP addresses with real-time geolocation, ISP data, and risk intelligence — powered by the [IpQuery API](https://ipquery.io) via [guibranco/ipquery-php](https://github.com/guibranco/ipquery-php).
 
 [![Build](https://img.shields.io/github/actions/workflow/status/guibranco/ipquery-wordpress/pages.yml?label=docs&style=flat-square)](https://github.com/guibranco/ipquery-wordpress/actions/workflows/pages.yml)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)](https://github.com/guibranco/ipquery-wordpress/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue?style=flat-square)](https://github.com/guibranco/ipquery-wordpress/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-%E2%89%A56.0-21759B?style=flat-square&logo=wordpress)](https://wordpress.org)
 [![PHP](https://img.shields.io/badge/PHP-%E2%89%A58.2-777BB4?style=flat-square&logo=php)](https://www.php.net)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
@@ -32,6 +32,7 @@ A WordPress plugin that enriches visitor IP addresses with real-time geolocation
 | 🗄️ | **Smart caching** | WordPress transients cache each IP for 1 hour; only one API call per IP per hour |
 | 🧹 | **Auto-retention** | Configurable data retention with daily WP-Cron cleanup |
 | 🔒 | **Privacy controls** | Exclude IPs, skip logged-in users or admins, disable tracking at any time |
+| 📥 | **CSV export** | Download all visitor data (or the current filtered view) as a UTF-8 CSV file |
 
 ---
 

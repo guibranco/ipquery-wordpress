@@ -346,4 +346,59 @@ class IpQuery_DB {
 		$result = $wpdb->get_results( "SELECT DISTINCT country, country_code FROM {$table} WHERE country_code IS NOT NULL AND country_code != '' ORDER BY country ASC", ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		return is_array( $result ) ? $result : array();
 	}
+
+	/**
+	 * Returns all visitor rows matching the given filters, with no pagination limit, for CSV export.
+	 *
+	 * @param array<string,mixed> $args Query arguments (orderby, order, search, country_code, risk_filter).
+	 * @return array<int,array<string,mixed>>
+	 */
+	public static function get_all_for_export( array $args = array() ): array {
+		global $wpdb;
+		$table = $wpdb->prefix . IPQUERY_TABLE;
+
+		$defaults = array(
+			'orderby'      => 'last_seen',
+			'order'        => 'DESC',
+			'search'       => '',
+			'country_code' => '',
+			'risk_filter'  => '',
+		);
+		$args     = wp_parse_args( $args, $defaults );
+
+		$where  = array();
+		$values = array();
+
+		if ( ! empty( $args['search'] ) ) {
+			$like    = '%' . $wpdb->esc_like( $args['search'] ) . '%';
+			$where[] = '(ip LIKE %s OR city LIKE %s OR country LIKE %s OR isp LIKE %s)';
+			$values  = array_merge( $values, array( $like, $like, $like, $like ) );
+		}
+		if ( ! empty( $args['country_code'] ) ) {
+			$where[]  = 'country_code = %s';
+			$values[] = $args['country_code'];
+		}
+		if ( ! empty( $args['risk_filter'] ) ) {
+			$allowed_flags = array( 'is_vpn', 'is_proxy', 'is_tor', 'is_datacenter', 'is_mobile' );
+			if ( in_array( $args['risk_filter'], $allowed_flags, true ) ) {
+				$where[] = $args['risk_filter'] . ' = 1';
+			}
+		}
+
+		$where_sql = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
+
+		$allowed_orderby = array( 'last_seen', 'first_seen', 'visit_count', 'country', 'risk_score', 'ip' );
+		$orderby         = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'last_seen';
+		$order           = 'ASC' === strtoupper( $args['order'] ) ? 'ASC' : 'DESC';
+
+		$sql = "SELECT * FROM {$table} {$where_sql} ORDER BY {$orderby} {$order}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( $values ) {
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql, ...$values ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
+		} else {
+			$rows = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
+
+		return is_array( $rows ) ? $rows : array();
+	}
 }
