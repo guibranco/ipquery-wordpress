@@ -366,10 +366,27 @@ class IpQuery_Admin {
 		fputcsv( // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv
 			$output,
 			array(
-				'IP', 'Country', 'Country Code', 'City', 'State', 'Zipcode',
-				'Latitude', 'Longitude', 'Timezone', 'ASN', 'Org', 'ISP',
-				'Is Mobile', 'Is VPN', 'Is Tor', 'Is Proxy', 'Is Datacenter',
-				'Risk Score', 'First Seen', 'Last Seen', 'Visit Count',
+				'IP',
+				'Country',
+				'Country Code',
+				'City',
+				'State',
+				'Zipcode',
+				'Latitude',
+				'Longitude',
+				'Timezone',
+				'ASN',
+				'Org',
+				'ISP',
+				'Is Mobile',
+				'Is VPN',
+				'Is Tor',
+				'Is Proxy',
+				'Is Datacenter',
+				'Risk Score',
+				'First Seen',
+				'Last Seen',
+				'Visit Count',
 			)
 		);
 
