@@ -4,7 +4,7 @@ Tags: ip, geolocation, analytics, security, heatmap
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.2
-Stable tag: 1.1.4
+Stable tag: 1.2.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -27,6 +27,7 @@ IpQuery enriches every visitor's IP address with real-time geolocation, ISP data
 * **Auto-retention** — Configurable data retention with daily WP-Cron cleanup
 * **Privacy controls** — Exclude IPs, skip logged-in users or admins, disable tracking at any time
 * **GDPR erasure tools** — Delete individual visitor records or bulk-erase all data for a specific country
+* **CSV export** — Download all visitor data (or the current filtered view) as a UTF-8 CSV file
 
 == Installation ==
 
@@ -70,6 +71,11 @@ All data is stored in your own WordPress database in the `wp_ipquery_visitors` t
 
 == Changelog ==
 
+= 1.2.0 =
+* Added CSV export — download all visitor records (or the current filtered view) directly from the Visitors screen
+* Export honours active search and risk-type filters so you can export exactly the subset you need
+* Exported CSV is UTF-8 with BOM for seamless Excel compatibility; filename includes today's date
+
 = 1.1.1 =
 * Maintenance and bug fixes
 
@@ -84,6 +90,9 @@ All data is stored in your own WordPress database in the `wp_ipquery_visitors` t
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Adds CSV export of visitor data from the Visitors screen. No database changes — safe to upgrade.
 
 = 1.1.1 =
 Maintenance release. Safe to upgrade.

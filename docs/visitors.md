@@ -39,6 +39,43 @@ Filters are applied server-side and are reflected in the record count shown abov
 
 ---
 
+## Export CSV
+
+Click **Export CSV** in the toolbar to download all currently visible visitor records as a UTF-8 encoded CSV file. The export honours any active search term or risk-type filter — only the rows that match the current filter are included.
+
+**Columns exported:**
+
+| Column | Description |
+|---|---|
+| IP | Raw IP address |
+| Country | Full country name |
+| Country Code | ISO 3166-1 alpha-2 code |
+| City | City name |
+| State | State or region |
+| Zipcode | Postal / ZIP code |
+| Latitude | Decimal latitude |
+| Longitude | Decimal longitude |
+| Timezone | IANA timezone identifier |
+| ASN | Autonomous System Number |
+| Org | Organisation name |
+| ISP | Internet Service Provider |
+| Is Mobile | Yes / No |
+| Is VPN | Yes / No |
+| Is Tor | Yes / No |
+| Is Proxy | Yes / No |
+| Is Datacenter | Yes / No |
+| Risk Score | 0 – 100 |
+| First Seen | UTC datetime of first visit |
+| Last Seen | UTC datetime of most recent visit |
+| Visit Count | Total visits attributed to this IP |
+
+The file is named `ipquery-visitors-YYYY-MM-DD.csv` (today's date). A UTF-8 BOM is prepended so that Excel opens the file correctly without a manual import step.
+
+{: .note }
+The export is not paginated — it always includes every matching record, regardless of how many pages the table spans.
+
+---
+
 ## Manual IP lookup
 
 Enter any valid IP address in the **Lookup IP…** field and click **Lookup**. The plugin immediately calls `IpQueryClient::getIpData()` from the [ipquery-php](https://github.com/guibranco/ipquery-php) library and stores the result. The page redirects back with a success or error notice.

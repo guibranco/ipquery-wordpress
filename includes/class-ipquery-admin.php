@@ -28,6 +28,7 @@ class IpQuery_Admin {
 		add_action( 'admin_post_ipquery_delete_by_country', array( self::class, 'handle_delete_by_country' ) );
 		add_action( 'admin_post_ipquery_purge', array( self::class, 'handle_purge' ) );
 		add_action( 'admin_post_ipquery_lookup', array( self::class, 'handle_manual_lookup' ) );
+		add_action( 'admin_post_ipquery_export_csv', array( self::class, 'handle_export_csv' ) );
 		add_action( 'wp_ajax_ipquery_chart_data', array( self::class, 'ajax_chart_data' ) );
 		add_action( 'wp_ajax_ipquery_heatmap_data', array( self::class, 'ajax_heatmap_data' ) );
 
@@ -327,6 +328,81 @@ class IpQuery_Admin {
 		} catch ( IpQueryException $e ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&lookup_error=' . rawurlencode( $e->getMessage() ) ) );
 		}
+		exit;
+	}
+
+	/**
+	 * Streams all matching visitor records as a CSV download.
+	 *
+	 * @return void
+	 */
+	public static function handle_export_csv(): void {
+		check_admin_referer( 'ipquery_export_csv' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Not allowed.', 'ipquery' ) );
+		}
+
+		$search      = sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) );
+		$risk_filter = sanitize_text_field( wp_unslash( $_POST['risk_filter'] ?? '' ) );
+
+		$rows     = IpQuery_DB::get_all_for_export(
+			array(
+				'search'      => $search,
+				'risk_filter' => $risk_filter,
+			)
+		);
+		$filename = 'ipquery-visitors-' . gmdate( 'Y-m-d' ) . '.csv';
+
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		$output = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+
+		// UTF-8 BOM for Excel compatibility.
+		fwrite( $output, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
+
+		fputcsv( // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv
+			$output,
+			array(
+				'IP', 'Country', 'Country Code', 'City', 'State', 'Zipcode',
+				'Latitude', 'Longitude', 'Timezone', 'ASN', 'Org', 'ISP',
+				'Is Mobile', 'Is VPN', 'Is Tor', 'Is Proxy', 'Is Datacenter',
+				'Risk Score', 'First Seen', 'Last Seen', 'Visit Count',
+			)
+		);
+
+		foreach ( $rows as $row ) {
+			fputcsv( // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv
+				$output,
+				array(
+					$row['ip'],
+					$row['country'] ?? '',
+					$row['country_code'] ?? '',
+					$row['city'] ?? '',
+					$row['state'] ?? '',
+					$row['zipcode'] ?? '',
+					$row['latitude'] ?? '',
+					$row['longitude'] ?? '',
+					$row['timezone'] ?? '',
+					$row['asn'] ?? '',
+					$row['org'] ?? '',
+					$row['isp'] ?? '',
+					$row['is_mobile'] ? 'Yes' : 'No',
+					$row['is_vpn'] ? 'Yes' : 'No',
+					$row['is_tor'] ? 'Yes' : 'No',
+					$row['is_proxy'] ? 'Yes' : 'No',
+					$row['is_datacenter'] ? 'Yes' : 'No',
+					$row['risk_score'] ?? 0,
+					$row['first_seen'] ?? '',
+					$row['last_seen'] ?? '',
+					$row['visit_count'] ?? 0,
+				)
+			);
+		}
+
+		fclose( $output ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		exit;
 	}
 

@@ -91,6 +91,15 @@ defined( 'ABSPATH' ) || exit; ?>
 			<input type="text" name="ip" placeholder="<?php esc_attr_e( 'Lookup IP…', 'ipquery' ); ?>" class="regular-text" pattern="^(\d{1,3}\.){3}\d{1,3}$|^[0-9a-fA-F:]+$">
 			<?php submit_button( __( 'Lookup', 'ipquery' ), 'secondary', 'lookup_btn', false ); ?>
 		</form>
+
+		<!-- Export CSV (carries active filters into the POST body) -->
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="ipquery-export-form">
+			<?php wp_nonce_field( 'ipquery_export_csv' ); ?>
+			<input type="hidden" name="action" value="ipquery_export_csv">
+			<input type="hidden" name="s" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_GET['s'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>">
+			<input type="hidden" name="risk_filter" value="<?php echo esc_attr( $ipquery_risk_filter ); ?>">
+			<?php submit_button( __( 'Export CSV', 'ipquery' ), 'secondary', 'export_csv_btn', false ); ?>
+		</form>
 	</div>
 
 	<?php
