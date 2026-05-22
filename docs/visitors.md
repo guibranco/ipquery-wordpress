@@ -5,7 +5,7 @@ nav_order: 5
 
 # Visitors
 
-The Visitors screen is at **IpQuery → Visitors**. It shows every IP address in the database with its full enrichment data, and provides tools for searching, filtering, manual lookups, and data purging.
+The Visitors screen is at **Visitor Analytics → Visitors**. It shows every IP address in the database with its full enrichment data, and provides tools for searching, filtering, manual lookups, and data purging.
 
 ---
 
@@ -134,7 +134,7 @@ Every country-filter deletion is written to the plugin's action log with:
 | **Performed by** | WordPress user ID and display name |
 | **Timestamp** | UTC date and time of the operation |
 
-The log is accessible under **IpQuery → Logs** and is retained for 90 days.
+The log is accessible under **Visitor Analytics → Logs** and is retained for 90 days.
 
 {: .warning }
 Country-filter deletion is irreversible. All records for the selected countries are permanently removed and cannot be recovered.

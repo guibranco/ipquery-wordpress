@@ -71,7 +71,7 @@ All collected data is stored in the `wp_ipquery_visitors` table in your own Word
 
 If you use this plugin, consider adding a clause similar to the following to your privacy policy:
 
-> We use the IpQuery for WordPress plugin to analyse visitor traffic. Your IP address is sent to the IpQuery API (ipquery.io) to retrieve geolocation and network risk information. This information is stored in our database for up to [X] days and is used solely for security and analytics purposes. It is not shared with third parties. You may request deletion of your data by contacting us at [your contact address].
+> We use the Stracini Visitor Analytics with IpQuery plugin to analyse visitor traffic. Your IP address is sent to the IpQuery API (ipquery.io) to retrieve geolocation and network risk information. This information is stored in our database for up to [X] days and is used solely for security and analytics purposes. It is not shared with third parties. You may request deletion of your data by contacting us at [your contact address].
 
 ---
 
@@ -84,7 +84,7 @@ Key properties of the tool:
 - **Targeted** — selects records by the `country_code` field stored from the IpQuery API response; only countries with stored records are shown.
 - **Bulk** — a single operation removes all matching records across as many countries as you select.
 - **Safe** — a mandatory confirmation dialog shows the affected countries and record count before any data is deleted.
-- **Auditable** — every deletion is written to the plugin action log (`IpQuery → Logs`) with the operator identity, country list, record count, and UTC timestamp.
+- **Auditable** — every deletion is written to the plugin action log (`Visitor Analytics → Logs`) with the operator identity, country list, record count, and UTC timestamp.
 
 See [Deleting records by country]({% link visitors.md %}#deleting-records-by-country) for step-by-step instructions.
 

@@ -5,7 +5,7 @@ nav_order: 3
 
 # Configuration
 
-All settings are found at **IpQuery → Settings** in the WordPress admin.
+All settings are found at **Visitor Analytics → Settings** in the WordPress admin.
 
 ---
 

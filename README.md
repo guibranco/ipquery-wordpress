@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌍 IpQuery
+# 🌍 Stracini Visitor Analytics with IpQuery
 
 **Track and analyse every visitor. Visualise traffic. Detect threats.**
 
@@ -15,6 +15,11 @@ A WordPress plugin that enriches visitor IP addresses with real-time geolocation
 [📖 Documentation](https://guilherme.stracini.com.br/ipquery-wordpress/) · [🐛 Report a Bug](https://github.com/guibranco/ipquery-wordpress/issues) · [✨ Request a Feature](https://github.com/guibranco/ipquery-wordpress/issues)
 
 </div>
+
+> **Plugin renamed for WordPress.org directory compliance**
+> The WordPress.org Plugin Review Team flagged "IpQuery" as a trademark that belongs to the [IpQuery API](https://ipquery.io) service.
+> The plugin has been renamed to **Stracini Visitor Analytics with IpQuery** to make it clear this is an independent, third-party integration and is not officially affiliated with IpQuery.
+> The repository name, internal class names, database table, and option keys are unchanged.
 
 ---
 
@@ -40,7 +45,7 @@ A WordPress plugin that enriches visitor IP addresses with real-time geolocation
 
 ### Dashboard
 
-The plugin adds an **IpQuery** entry to the WordPress admin sidebar with three sub-pages.
+The plugin adds a **Visitor Analytics** entry to the WordPress admin sidebar with three sub-pages.
 
 **Dashboard** — a live overview built from four widgets:
 
@@ -136,7 +141,7 @@ The plugin automatically:
 
 ## ⚙️ Configuration
 
-Navigate to **IpQuery → Settings** to configure:
+Navigate to **Visitor Analytics → Settings** to configure:
 
 | Setting | Default | Description |
 |---|---|---|
