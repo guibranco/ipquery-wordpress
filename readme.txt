@@ -1,4 +1,4 @@
-=== IpQuery ===
+=== Stracini Visitor Analytics with IpQuery ===
 Contributors: guilhermestracini
 Tags: ip, geolocation, analytics, security, heatmap
 Requires at least: 6.0
@@ -8,7 +8,7 @@ Stable tag: 1.2.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Track and analyse visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy/Tor statistics.
+Track and analyse visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy/Tor statistics. This plugin is not officially affiliated with IpQuery.
 
 == Description ==
 
@@ -48,7 +48,7 @@ No. All API calls are deferred to the WordPress `shutdown` action, which runs af
 
 = What data is collected? =
 
-For each unique visitor IP the plugin stores: country, city, state, latitude/longitude, timezone, ISP/ASN, VPN/proxy/Tor/datacenter/mobile flags, risk score, first/last seen timestamps, and visit count. See the [Privacy & GDPR](https://guilherme.stracini.com.br/ipquery-wordpress/privacy) documentation for full details.
+For each unique visitor IP the plugin stores: country, city, state, latitude/longitude, timezone, ISP/ASN, VPN/proxy/Tor/datacenter/mobile flags, risk score, first/last seen timestamps, and visit count. See the [Privacy & GDPR](https://guilherme.stracini.com.br/ipquery-wordpress/privacy/) documentation for full details.
 
 = Is this GDPR compliant? =
 
@@ -105,12 +105,25 @@ Initial release.
 
 == Third-party services ==
 
-This plugin makes server-side requests to the **IpQuery API** (`https://api.ipquery.io`) to enrich visitor IP addresses with geolocation, ISP, and risk data. Requests are made from your web server — not from the visitor's browser.
+This plugin is not officially affiliated with IpQuery.
 
-* [IpQuery API](https://ipquery.io)
-* [IpQuery Terms of Service](https://ipquery.io/terms)
-* [IpQuery Privacy Policy](https://ipquery.io/privacy)
+= IpQuery API =
 
-This plugin bundles the **guibranco/ipquery-php** library (MIT License), which handles all communication with the IpQuery API.
+This plugin makes server-side requests to the **IpQuery API** (`https://api.ipquery.io`) to enrich visitor IP addresses with geolocation, ISP, and risk data. Requests are made from your web server — not from the visitor's browser. The visitor's IP address is sent to the IpQuery API on each page load when tracking is enabled and the IP has not been cached.
+
+* [IpQuery website](https://ipquery.io)
+* For terms of service and privacy inquiries: contact@ipquery.io
+
+= Flag CDN (flagcdn.com) =
+
+The admin dashboard and visitors screen load country flag images from **Flag CDN**, a free service provided by Flagpedia.net and hosted on Cloudflare. Flag images are loaded in the WordPress admin area only (never on the public-facing site). The visitor's country code (a 2-letter ISO code, e.g. "US") is sent as part of the image URL to retrieve the corresponding flag.
+
+* [Flag CDN website](https://flagcdn.com)
+* [Flagpedia Terms of Use](https://flagpedia.net/terms)
+* [Flagpedia Privacy Policy](https://flagpedia.net/privacy-policy)
+
+= Bundled library =
+
+This plugin bundles the **guibranco/ipquery-php** library (MIT License), which handles all communication with the IpQuery API. No data is sent by this library to any service other than the IpQuery API.
 
 * [guibranco/ipquery-php on GitHub](https://github.com/guibranco/ipquery-php)

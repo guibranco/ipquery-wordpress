@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       IpQuery
+ * Plugin Name:       Stracini Visitor Analytics with IpQuery
  * Plugin URI:        https://guilherme.stracini.com.br/ipquery-wordpress/
  * Description:       Track and analyse visitor IP data using the IpQuery API (via guibranco/ipquery-php). Displays location maps, traffic heatmaps, and VPN/proxy statistics.
  * Version:           1.2.0
@@ -10,7 +10,7 @@
  * Author URI:        https://guilherme.stracini.com.br
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
- * Text Domain:       ipquery
+ * Text Domain:       stracini-visitor-analytics
  *
  * Bundled library:   guibranco/ipquery-php (MIT License)
  * Library URI:       https://github.com/guibranco/ipquery-php

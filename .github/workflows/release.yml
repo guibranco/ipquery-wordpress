@@ -81,15 +81,15 @@ jobs:
         env:
           VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
-          mkdir -p /tmp/ipquery
-          git archive HEAD | tar -x -C /tmp/ipquery
+          mkdir -p /tmp/stracini-visitor-analytics
+          git archive HEAD | tar -x -C /tmp/stracini-visitor-analytics
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wp-version: 'latest'
-          build-dir: /tmp/ipquery
+          build-dir: /tmp/stracini-visitor-analytics
 
   # ---------------------------------------------------------------------------
   # Bump version files, tag, build release zip, publish GitHub Release.
@@ -143,13 +143,13 @@ jobs:
         env:
           VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
-          git archive HEAD --format=zip --prefix=ipquery/ --output="/tmp/ipquery-${VERSION}.zip"
-          echo "ZIP=/tmp/ipquery-${VERSION}.zip" >> "$GITHUB_ENV"
+          git archive HEAD --format=zip --prefix=stracini-visitor-analytics/ --output="/tmp/stracini-visitor-analytics-${VERSION}.zip"
+          echo "ZIP=/tmp/stracini-visitor-analytics-${VERSION}.zip" >> "$GITHUB_ENV"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ needs.version.outputs.fullSemVer }}
-          name: IpQuery v${{ needs.version.outputs.fullSemVer }}
+          name: Stracini Visitor Analytics with IpQuery v${{ needs.version.outputs.fullSemVer }}
           generate_release_notes: true
           files: ${{ env.ZIP }}

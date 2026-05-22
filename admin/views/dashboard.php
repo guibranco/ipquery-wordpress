@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit; ?>
 <div class="wrap ipquery-wrap">
 	<h1 class="wp-heading-inline">
 		<span class="dashicons dashicons-location-alt"></span>
-		<?php esc_html_e( 'IpQuery — Dashboard', 'ipquery' ); ?>
+		<?php esc_html_e( 'Visitor Analytics — Dashboard', 'stracini-visitor-analytics' ); ?>
 	</h1>
 	<hr class="wp-header-end">
 
@@ -28,21 +28,21 @@ defined( 'ABSPATH' ) || exit; ?>
 			<div class="ipquery-card__icon dashicons dashicons-admin-users"></div>
 			<div class="ipquery-card__body">
 				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_total_visits ) ); ?></span>
-				<span class="ipquery-card__label"><?php esc_html_e( 'Total Visits', 'ipquery' ); ?></span>
+				<span class="ipquery-card__label"><?php esc_html_e( 'Total Visits', 'stracini-visitor-analytics' ); ?></span>
 			</div>
 		</div>
 		<div class="ipquery-card ipquery-card--green">
 			<div class="ipquery-card__icon dashicons dashicons-networking"></div>
 			<div class="ipquery-card__body">
 				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_unique_ips ) ); ?></span>
-				<span class="ipquery-card__label"><?php esc_html_e( 'Unique IPs', 'ipquery' ); ?></span>
+				<span class="ipquery-card__label"><?php esc_html_e( 'Unique IPs', 'stracini-visitor-analytics' ); ?></span>
 			</div>
 		</div>
 		<div class="ipquery-card ipquery-card--orange">
 			<div class="ipquery-card__icon dashicons dashicons-shield-alt"></div>
 			<div class="ipquery-card__body">
 				<span class="ipquery-card__value"><?php echo esc_html( number_format_i18n( $ipquery_risk_counts['vpn'] + $ipquery_risk_counts['proxy'] + $ipquery_risk_counts['tor'] ) ); ?></span>
-				<span class="ipquery-card__label"><?php esc_html_e( 'VPN / Proxy / Tor', 'ipquery' ); ?></span>
+				<span class="ipquery-card__label"><?php esc_html_e( 'VPN / Proxy / Tor', 'stracini-visitor-analytics' ); ?></span>
 			</div>
 		</div>
 		<div class="ipquery-card ipquery-card--red">
@@ -54,7 +54,7 @@ defined( 'ABSPATH' ) || exit; ?>
 					: 0;
 				?>
 				<span class="ipquery-card__value"><?php echo esc_html( $ipquery_risky_pct ); ?>%</span>
-				<span class="ipquery-card__label"><?php esc_html_e( 'Risk Rate', 'ipquery' ); ?></span>
+				<span class="ipquery-card__label"><?php esc_html_e( 'Risk Rate', 'stracini-visitor-analytics' ); ?></span>
 			</div>
 		</div>
 	</div>
@@ -64,13 +64,13 @@ defined( 'ABSPATH' ) || exit; ?>
 
 		<!-- World heatmap -->
 		<div class="ipquery-panel ipquery-panel--wide">
-			<h2><?php esc_html_e( 'Visitor Heatmap', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Visitor Heatmap', 'stracini-visitor-analytics' ); ?></h2>
 			<div id="ipquery-map" style="height:420px;"></div>
 		</div>
 
 		<!-- Country chart -->
 		<div class="ipquery-panel ipquery-panel--narrow">
-			<h2><?php esc_html_e( 'Top Countries', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Top Countries', 'stracini-visitor-analytics' ); ?></h2>
 			<div class="ipquery-chart-wrap" style="position:relative;height:390px;overflow:hidden;">
 				<canvas id="ipquery-country-chart"></canvas>
 			</div>
@@ -82,7 +82,7 @@ defined( 'ABSPATH' ) || exit; ?>
 	<div class="ipquery-row">
 
 		<div class="ipquery-panel ipquery-panel--half">
-			<h2><?php esc_html_e( 'Risk Breakdown', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Risk Breakdown', 'stracini-visitor-analytics' ); ?></h2>
 			<div class="ipquery-chart-wrap" style="position:relative;height:260px;overflow:hidden;">
 				<canvas id="ipquery-risk-chart"></canvas>
 			</div>
@@ -90,18 +90,18 @@ defined( 'ABSPATH' ) || exit; ?>
 
 		<!-- Country table -->
 		<div class="ipquery-panel ipquery-panel--half">
-			<h2><?php esc_html_e( 'Top Countries', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Top Countries', 'stracini-visitor-analytics' ); ?></h2>
 			<table class="widefat striped ipquery-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Country', 'ipquery' ); ?></th>
-						<th><?php esc_html_e( 'Visits', 'ipquery' ); ?></th>
-						<th><?php esc_html_e( '%', 'ipquery' ); ?></th>
+						<th><?php esc_html_e( 'Country', 'stracini-visitor-analytics' ); ?></th>
+						<th><?php esc_html_e( 'Visits', 'stracini-visitor-analytics' ); ?></th>
+						<th><?php esc_html_e( '%', 'stracini-visitor-analytics' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php if ( empty( $ipquery_top_countries ) ) : ?>
-					<tr><td colspan="3"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
+					<tr><td colspan="3"><?php esc_html_e( 'No data yet.', 'stracini-visitor-analytics' ); ?></td></tr>
 				<?php else : ?>
 					<?php foreach ( $ipquery_top_countries as $ipquery_row ) : ?>
 					<tr>
@@ -128,19 +128,19 @@ defined( 'ABSPATH' ) || exit; ?>
 	<!-- Cities table -->
 	<div class="ipquery-row">
 		<div class="ipquery-panel ipquery-panel--half">
-			<h2><?php esc_html_e( 'Top Cities', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Top Cities', 'stracini-visitor-analytics' ); ?></h2>
 			<table class="widefat striped ipquery-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'City', 'ipquery' ); ?></th>
-						<th><?php esc_html_e( 'Country', 'ipquery' ); ?></th>
-						<th><?php esc_html_e( 'Visits', 'ipquery' ); ?></th>
-						<th><?php esc_html_e( '%', 'ipquery' ); ?></th>
+						<th><?php esc_html_e( 'City', 'stracini-visitor-analytics' ); ?></th>
+						<th><?php esc_html_e( 'Country', 'stracini-visitor-analytics' ); ?></th>
+						<th><?php esc_html_e( 'Visits', 'stracini-visitor-analytics' ); ?></th>
+						<th><?php esc_html_e( '%', 'stracini-visitor-analytics' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php if ( empty( $ipquery_top_cities ) ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'No data yet.', 'ipquery' ); ?></td></tr>
+					<tr><td colspan="4"><?php esc_html_e( 'No data yet.', 'stracini-visitor-analytics' ); ?></td></tr>
 				<?php else : ?>
 					<?php foreach ( $ipquery_top_cities as $ipquery_row ) : ?>
 					<tr>
@@ -167,36 +167,36 @@ defined( 'ABSPATH' ) || exit; ?>
 	<!-- Risk detail cards -->
 	<div class="ipquery-row">
 		<div class="ipquery-panel">
-			<h2><?php esc_html_e( 'Risk Details', 'ipquery' ); ?></h2>
+			<h2><?php esc_html_e( 'Risk Details', 'stracini-visitor-analytics' ); ?></h2>
 			<div class="ipquery-risk-grid">
 				<?php
 				$ipquery_risk_items = array(
 					array(
-						'label' => __( 'VPN', 'ipquery' ),
+						'label' => __( 'VPN', 'stracini-visitor-analytics' ),
 						'count' => $ipquery_risk_counts['vpn'],
 						'icon'  => 'lock',
 						'class' => 'orange',
 					),
 					array(
-						'label' => __( 'Proxy', 'ipquery' ),
+						'label' => __( 'Proxy', 'stracini-visitor-analytics' ),
 						'count' => $ipquery_risk_counts['proxy'],
 						'icon'  => 'update',
 						'class' => 'red',
 					),
 					array(
-						'label' => __( 'Tor', 'ipquery' ),
+						'label' => __( 'Tor', 'stracini-visitor-analytics' ),
 						'count' => $ipquery_risk_counts['tor'],
 						'icon'  => 'hidden',
 						'class' => 'red',
 					),
 					array(
-						'label' => __( 'Datacenter', 'ipquery' ),
+						'label' => __( 'Datacenter', 'stracini-visitor-analytics' ),
 						'count' => $ipquery_risk_counts['datacenter'],
 						'icon'  => 'cloud',
 						'class' => 'blue',
 					),
 					array(
-						'label' => __( 'Mobile', 'ipquery' ),
+						'label' => __( 'Mobile', 'stracini-visitor-analytics' ),
 						'count' => $ipquery_risk_counts['mobile'],
 						'icon'  => 'smartphone',
 						'class' => 'green',
