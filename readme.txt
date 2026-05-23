@@ -8,7 +8,7 @@ Stable tag: 1.3.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Track and analyze visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy/Tor statistics. This plugin is not officially affiliated with IpQuery.
+Track and analyze visitor IP data using the IpQuery API. This plugin is not officially affiliated with IpQuery.
 
 == Description ==
 
