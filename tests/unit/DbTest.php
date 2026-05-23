@@ -7,7 +7,7 @@ use Brain\Monkey\Functions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(IpQuery_DB::class)]
+#[CoversClass(SVA_DB::class)]
 class DbTest extends TestCase {
 
     protected function setUp(): void {
@@ -25,7 +25,7 @@ class DbTest extends TestCase {
     // -------------------------------------------------------------------------
 
     public function test_db_version_constant_is_defined(): void {
-        $this->assertSame( '1.0.0', IpQuery_DB::DB_VERSION );
+        $this->assertSame( '1.0.0', SVA_DB::DB_VERSION );
     }
 
     // -------------------------------------------------------------------------
@@ -63,7 +63,7 @@ class DbTest extends TestCase {
             }
         );
 
-        $result = IpQuery_DB::get_visitors( [] );
+        $result = SVA_DB::get_visitors( [] );
 
         $this->assertArrayHasKey( 'rows', $result );
         $this->assertArrayHasKey( 'total', $result );
@@ -83,7 +83,7 @@ class DbTest extends TestCase {
         $validColumns = ['last_seen', 'first_seen', 'visit_count', 'country', 'risk_score', 'ip'];
 
         foreach ( $validColumns as $column ) {
-            $result = IpQuery_DB::get_visitors( ['orderby' => $column] );
+            $result = SVA_DB::get_visitors( ['orderby' => $column] );
             $this->assertArrayHasKey( 'rows', $result, "Expected 'rows' key for orderby=$column" );
         }
     }
@@ -118,7 +118,7 @@ class DbTest extends TestCase {
             }
         );
 
-        IpQuery_DB::get_visitors( ['orderby' => 'malicious_column; DROP TABLE--'] );
+        SVA_DB::get_visitors( ['orderby' => 'malicious_column; DROP TABLE--'] );
 
         $this->assertStringContainsString( 'last_seen', $wpdb->lastQuery );
         $this->assertStringNotContainsString( 'malicious_column', $wpdb->lastQuery );
@@ -154,7 +154,7 @@ class DbTest extends TestCase {
             }
         );
 
-        IpQuery_DB::get_visitors( ['order' => 'INVALID; DROP TABLE--'] );
+        SVA_DB::get_visitors( ['order' => 'INVALID; DROP TABLE--'] );
 
         $this->assertStringContainsString( ' DESC', $wpdb->lastQuery );
         $this->assertStringNotContainsString( 'INVALID', $wpdb->lastQuery );

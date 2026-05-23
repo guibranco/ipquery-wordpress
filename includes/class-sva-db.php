@@ -2,15 +2,15 @@
 /**
  * Database helper — table creation, upsert, and query methods.
  *
- * @package IpQuery
+ * @package SVA
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles all direct database interactions for the IpQuery plugin.
+ * Handles all direct database interactions for the SVA plugin.
  */
-class IpQuery_DB {
+class SVA_DB {
 
 	const DB_VERSION = '1.0.0';
 
@@ -22,7 +22,7 @@ class IpQuery_DB {
 	public static function install(): void {
 		global $wpdb;
 
-		$table   = $wpdb->prefix . IPQUERY_TABLE;
+		$table   = $wpdb->prefix . SVA_TABLE;
 		$charset = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE {$table} (
@@ -57,11 +57,11 @@ class IpQuery_DB {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta( $sql );
-		update_option( 'ipquery_db_version', self::DB_VERSION );
+		update_option( 'sva_db_version', self::DB_VERSION );
 
-		if ( false === get_option( 'ipquery_settings' ) ) {
+		if ( false === get_option( 'sva_settings' ) ) {
 			update_option(
-				'ipquery_settings',
+				'sva_settings',
 				array(
 					'tracking_enabled'   => true,
 					'track_logged_in'    => false,
@@ -88,7 +88,7 @@ class IpQuery_DB {
 	 */
 	public static function uninstall(): void {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange
 	}
 
@@ -104,7 +104,7 @@ class IpQuery_DB {
 	 */
 	public static function upsert( array $data ): void {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		$now   = current_time( 'mysql' );
 
 		$existing = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -140,7 +140,7 @@ class IpQuery_DB {
 	 */
 	public static function get_total_visits(): int {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		return (int) $wpdb->get_var( "SELECT SUM(visit_count) FROM {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
@@ -151,7 +151,7 @@ class IpQuery_DB {
 	 */
 	public static function get_unique_ips(): int {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
@@ -162,7 +162,7 @@ class IpQuery_DB {
 	 */
 	public static function get_risk_counts(): array {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		return array(
 			'vpn'        => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE is_vpn = 1" ),        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			'proxy'      => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE is_proxy = 1" ),      // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -180,7 +180,7 @@ class IpQuery_DB {
 	 */
 	public static function get_top_countries( int $limit = 10 ): array {
 		global $wpdb;
-		$table  = $wpdb->prefix . IPQUERY_TABLE;
+		$table  = $wpdb->prefix . SVA_TABLE;
 		$sql    = $wpdb->prepare( "SELECT country, country_code, SUM(visit_count) AS visits FROM {$table} WHERE country_code IS NOT NULL GROUP BY country_code ORDER BY visits DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
@@ -194,7 +194,7 @@ class IpQuery_DB {
 	 */
 	public static function get_top_cities( int $limit = 10 ): array {
 		global $wpdb;
-		$table  = $wpdb->prefix . IPQUERY_TABLE;
+		$table  = $wpdb->prefix . SVA_TABLE;
 		$sql    = $wpdb->prepare( "SELECT city, country, country_code, SUM(visit_count) AS visits FROM {$table} WHERE city IS NOT NULL AND city != '' GROUP BY city, country_code ORDER BY visits DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
@@ -208,7 +208,7 @@ class IpQuery_DB {
 	 */
 	public static function get_coordinates_for_heatmap( int $limit = 500 ): array {
 		global $wpdb;
-		$table  = $wpdb->prefix . IPQUERY_TABLE;
+		$table  = $wpdb->prefix . SVA_TABLE;
 		$sql    = $wpdb->prepare( "SELECT latitude, longitude, visit_count AS intensity FROM {$table} WHERE latitude IS NOT NULL AND longitude IS NOT NULL ORDER BY visit_count DESC LIMIT %d", $limit ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$result = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return is_array( $result ) ? $result : array();
@@ -222,7 +222,7 @@ class IpQuery_DB {
 	 */
 	public static function get_visitors( array $args = array() ): array {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 
 		$defaults = array(
 			'per_page'     => 25,
@@ -288,7 +288,7 @@ class IpQuery_DB {
 	 */
 	public static function delete_old_records( int $days ): int {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		$sql   = $wpdb->prepare( "DELETE FROM {$table} WHERE last_seen < DATE_SUB(NOW(), INTERVAL %d DAY)", $days ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		return (int) $wpdb->rows_affected;
@@ -302,7 +302,7 @@ class IpQuery_DB {
 	 */
 	public static function delete_ip( string $ip ): void {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		$wpdb->delete( $table, array( 'ip' => $ip ), array( '%s' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
@@ -315,7 +315,7 @@ class IpQuery_DB {
 	public static function log_action( string $message ): void {
 		if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			error_log( '[IpQuery] ' . $message );
+			error_log( '[SVA] ' . $message );
 		}
 	}
 
@@ -327,7 +327,7 @@ class IpQuery_DB {
 	 */
 	public static function delete_by_country( string $country_code ): int|false {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		return $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			array( 'country_code' => sanitize_text_field( $country_code ) ),
@@ -342,7 +342,7 @@ class IpQuery_DB {
 	 */
 	public static function get_distinct_countries(): array {
 		global $wpdb;
-		$table  = $wpdb->prefix . IPQUERY_TABLE;
+		$table  = $wpdb->prefix . SVA_TABLE;
 		$result = $wpdb->get_results( "SELECT DISTINCT country, country_code FROM {$table} WHERE country_code IS NOT NULL AND country_code != '' ORDER BY country ASC", ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		return is_array( $result ) ? $result : array();
 	}
@@ -355,7 +355,7 @@ class IpQuery_DB {
 	 */
 	public static function get_all_for_export( array $args = array() ): array {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 
 		$defaults = array(
 			'orderby'      => 'last_seen',
