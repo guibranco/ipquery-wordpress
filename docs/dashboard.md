@@ -5,7 +5,7 @@ nav_order: 4
 
 # Dashboard
 
-The dashboard is at **IpQuery → Dashboard**. It gives a live overview of all tracked visitor data.
+The dashboard is at **Visitor Analytics → Dashboard**. It gives a live overview of all tracked visitor data.
 
 ---
 

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="IpQuery">
-    <description>IpQuery WordPress Plugin Coding Standards</description>
+<ruleset name="Stracini Visitor Analytics with IpQuery">
+    <description>Stracini Visitor Analytics with IpQuery WordPress Plugin Coding Standards</description>
 
-    <file>ipquery.php</file>
+    <file>stracini-visitor-analytics.php</file>
     <file>includes/</file>
     <file>admin/</file>
 
@@ -19,7 +19,7 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="ipquery" />
+                <element value="stracini-visitor-analytics" />                
             </property>
         </properties>
     </rule>

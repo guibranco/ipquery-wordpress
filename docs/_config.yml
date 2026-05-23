@@ -1,13 +1,14 @@
 # ======================================================================
-#  IpQuery Wordpress Plugin documentation site — Jekyll + just-the-docs
+#  Stracini Visitor Analytics with IpQuery — Jekyll + just-the-docs
 #  Lives at: /docs (in the ipquery-wordpress repo)
 #  Serves from: https://guilherme.stracini.com.br/ipquery-wordpress/
 # ======================================================================
 
-title: IpQuery
+title: Stracini Visitor Analytics with IpQuery
 description: >-
   Track and analyse visitor IP data using the IpQuery API.
   Displays location maps, traffic heatmaps, and VPN/proxy statistics.
+  This plugin is not officially affiliated with IpQuery.
 remote_theme: just-the-docs/just-the-docs@v0.12.0
 
 url: https://guilherme.stracini.com.br
@@ -70,7 +71,7 @@ enable_copy_code_button: true
 # ----------------------------------------------------------------------
 footer_content: >-
   &copy; 2026 <a href="https://guilherme.stracini.com.br">Guilherme Branco Stracini</a>.
-  IpQuery is open source under the
+  Stracini Visitor Analytics with IpQuery is open source under the
   <a href="https://github.com/guibranco/ipquery-wordpress/blob/main/LICENSE">MIT license</a>.
   Built with <a href="https://just-the-docs.com">Just the Docs</a>.
   Powered by <a href="https://github.com/guibranco/ipquery-php" target="_blank">guibranco/ipquery-php</a>

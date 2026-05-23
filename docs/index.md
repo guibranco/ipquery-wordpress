@@ -4,7 +4,7 @@ nav_order: 1
 permalink: /
 ---
 
-# IpQuery for WordPress
+# Stracini Visitor Analytics with IpQuery
 
 Track and analyse visitor IP data directly from your WordPress admin panel — see where your visitors come from on an interactive heatmap, identify VPN and proxy traffic, and drill into per-IP details.
 

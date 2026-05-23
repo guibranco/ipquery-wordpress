@@ -2,17 +2,17 @@
 Contributors: guilhermestracini
 Tags: ip, geolocation, analytics, security, heatmap
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 8.2
 Stable tag: 1.2.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Track and analyse visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy/Tor statistics. This plugin is not officially affiliated with IpQuery.
+Track and analyze visitor IP data using the IpQuery API. Displays location maps, traffic heatmaps, and VPN/proxy/Tor statistics. This plugin is not officially affiliated with IpQuery.
 
 == Description ==
 
-IpQuery enriches every visitor's IP address with real-time geolocation, ISP data, and risk intelligence — powered by the [IpQuery API](https://ipquery.io) via the bundled [guibranco/ipquery-php](https://github.com/guibranco/ipquery-php) library.
+Stracini Visitor Analytics with IpQuery enriches every visitor's IP address with real-time geolocation, ISP data, and risk intelligence — powered by the [IpQuery API](https://ipquery.io) via the bundled [guibranco/ipquery-php](https://github.com/guibranco/ipquery-php) library.
 
 **Features:**
 
@@ -60,7 +60,7 @@ Navigate to **IpQuery → Settings → GDPR Erasure**, select the country from t
 
 = Where is data stored? =
 
-All data is stored in your own WordPress database in the `wp_ipquery_visitors` table. No data is sent to any service other than the IpQuery API lookup.
+All data is stored in your own WordPress database in the `wp_stracini_visitor_analytics_visitors` table. No data is sent to any service other than the IpQuery API lookup.
 
 == Screenshots ==
 

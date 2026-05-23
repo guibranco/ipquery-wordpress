@@ -2,7 +2,7 @@
 /**
  * Visitor tracker — captures IP addresses and defers API enrichment to shutdown.
  *
- * @package IpQuery
+ * @package SVA
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ use GuiBranco\IpQuery\IpQueryException;
 /**
  * Hooks into WordPress request handling to capture and enrich visitor IPs.
  */
-class IpQuery_Tracker {
+class SVA_Tracker {
 
 	/**
 	 * Plugin settings loaded from the database.
@@ -70,7 +70,7 @@ class IpQuery_Tracker {
 			}
 		}
 
-		$transient_key = 'ipq_' . md5( $ip );
+		$transient_key = 'sva_' . md5( $ip );
 		if ( get_transient( $transient_key ) ) {
 			self::bump_visit( $ip );
 			return;
@@ -118,12 +118,12 @@ class IpQuery_Tracker {
 				'risk_score'    => $response->risk?->riskScore ?? 0,
 			);
 
-			IpQuery_DB::upsert( $row );
+			SVA_DB::upsert( $row );
 
 			set_transient( $transient_key, 1, HOUR_IN_SECONDS );
 
 		} catch ( IpQueryException $e ) {
-			error_log( '[IpQuery WP] ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( '[SVA] ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 	}
 
@@ -135,7 +135,7 @@ class IpQuery_Tracker {
 	 */
 	private static function bump_visit( string $ip ): void {
 		global $wpdb;
-		$table = $wpdb->prefix . IPQUERY_TABLE;
+		$table = $wpdb->prefix . SVA_TABLE;
 		$sql   = $wpdb->prepare( "UPDATE {$table} SET visit_count = visit_count + 1, last_seen = %s WHERE ip = %s", current_time( 'mysql' ), $ip ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 	}

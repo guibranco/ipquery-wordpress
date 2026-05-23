@@ -2,7 +2,7 @@
 /**
  * Admin controller — menus, asset enqueueing, form handlers, and AJAX endpoints.
  *
- * @package IpQuery
+ * @package SVA
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ use GuiBranco\IpQuery\IpQueryException;
 /**
  * Registers and handles all WordPress admin functionality for IpQuery.
  */
-class IpQuery_Admin {
+class SVA_Admin {
 
 	/**
 	 * Registers all admin hooks.
@@ -24,19 +24,19 @@ class IpQuery_Admin {
 		add_action( 'admin_menu', array( self::class, 'register_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
 		add_action( 'admin_init', array( self::class, 'handle_settings_save' ) );
-		add_action( 'admin_post_ipquery_delete_ip', array( self::class, 'handle_delete_ip' ) );
-		add_action( 'admin_post_ipquery_delete_by_country', array( self::class, 'handle_delete_by_country' ) );
-		add_action( 'admin_post_ipquery_purge', array( self::class, 'handle_purge' ) );
-		add_action( 'admin_post_ipquery_lookup', array( self::class, 'handle_manual_lookup' ) );
-		add_action( 'admin_post_ipquery_export_csv', array( self::class, 'handle_export_csv' ) );
-		add_action( 'wp_ajax_ipquery_chart_data', array( self::class, 'ajax_chart_data' ) );
-		add_action( 'wp_ajax_ipquery_heatmap_data', array( self::class, 'ajax_heatmap_data' ) );
+		add_action( 'admin_post_sva_delete_ip', array( self::class, 'handle_delete_ip' ) );
+		add_action( 'admin_post_sva_delete_by_country', array( self::class, 'handle_delete_by_country' ) );
+		add_action( 'admin_post_sva_purge', array( self::class, 'handle_purge' ) );
+		add_action( 'admin_post_sva_lookup', array( self::class, 'handle_manual_lookup' ) );
+		add_action( 'admin_post_sva_export_csv', array( self::class, 'handle_export_csv' ) );
+		add_action( 'wp_ajax_sva_chart_data', array( self::class, 'ajax_chart_data' ) );
+		add_action( 'wp_ajax_sva_heatmap_data', array( self::class, 'ajax_heatmap_data' ) );
 
 		// Schedule daily cleanup cron if not already queued.
-		if ( ! wp_next_scheduled( 'ipquery_daily_cleanup' ) ) {
-			wp_schedule_event( time(), 'daily', 'ipquery_daily_cleanup' );
+		if ( ! wp_next_scheduled( 'sva_daily_cleanup' ) ) {
+			wp_schedule_event( time(), 'daily', 'sva_daily_cleanup' );
 		}
-		add_action( 'ipquery_daily_cleanup', array( self::class, 'run_cleanup' ) );
+		add_action( 'sva_daily_cleanup', array( self::class, 'run_cleanup' ) );
 	}
 
 	/**
@@ -49,33 +49,33 @@ class IpQuery_Admin {
 			__( 'Visitor Analytics', 'stracini-visitor-analytics' ),
 			__( 'Visitor Analytics', 'stracini-visitor-analytics' ),
 			'manage_options',
-			'ipquery-dashboard',
+			'sva-dashboard',
 			array( self::class, 'page_dashboard' ),
 			'dashicons-location-alt',
 			81
 		);
 		add_submenu_page(
-			'ipquery-dashboard',
+			'sva-dashboard',
 			__( 'Dashboard', 'stracini-visitor-analytics' ),
 			__( 'Dashboard', 'stracini-visitor-analytics' ),
 			'manage_options',
-			'ipquery-dashboard',
+			'sva-dashboard',
 			array( self::class, 'page_dashboard' )
 		);
 		add_submenu_page(
-			'ipquery-dashboard',
+			'sva-dashboard',
 			__( 'Visitors', 'stracini-visitor-analytics' ),
 			__( 'Visitors', 'stracini-visitor-analytics' ),
 			'manage_options',
-			'ipquery-visitors',
+			'sva-visitors',
 			array( self::class, 'page_visitors' )
 		);
 		add_submenu_page(
-			'ipquery-dashboard',
+			'sva-dashboard',
 			__( 'Settings', 'stracini-visitor-analytics' ),
 			__( 'Settings', 'stracini-visitor-analytics' ),
 			'manage_options',
-			'ipquery-settings',
+			'sva-settings',
 			array( self::class, 'page_settings' )
 		);
 	}
@@ -92,26 +92,26 @@ class IpQuery_Admin {
 		}
 
 		// Leaflet map library (bundled).
-		wp_enqueue_style( 'leaflet', IPQUERY_URL . 'assets/css/leaflet.min.css', array(), '1.9.4' );
-		wp_enqueue_script( 'leaflet', IPQUERY_URL . 'assets/js/leaflet.min.js', array(), '1.9.4', true );
-		wp_enqueue_script( 'leaflet-heat', IPQUERY_URL . 'assets/js/leaflet-heat.js', array( 'leaflet' ), '0.2.0', true );
+		wp_enqueue_style( 'leaflet', SVA_URL . 'assets/css/leaflet.min.css', array(), '1.9.4' );
+		wp_enqueue_script( 'leaflet', SVA_URL . 'assets/js/leaflet.min.js', array(), '1.9.4', true );
+		wp_enqueue_script( 'leaflet-heat', SVA_URL . 'assets/js/leaflet-heat.js', array( 'leaflet' ), '0.2.0', true );
 
 		// Chart.js for bar and doughnut charts (bundled).
-		wp_enqueue_script( 'chartjs', IPQUERY_URL . 'assets/js/chart.umd.min.js', array(), '4.5.1', true );
+		wp_enqueue_script( 'chartjs', SVA_URL . 'assets/js/chart.umd.min.js', array(), '4.5.1', true );
 
 		// Plugin assets.
-		wp_enqueue_style( 'ipquery-admin', IPQUERY_URL . 'assets/css/admin.css', array(), IPQUERY_VERSION );
-		wp_enqueue_script( 'ipquery-maps', IPQUERY_URL . 'assets/js/ipquery-maps.js', array( 'leaflet', 'leaflet-heat', 'jquery' ), IPQUERY_VERSION, true );
-		wp_enqueue_script( 'ipquery-charts', IPQUERY_URL . 'assets/js/ipquery-charts.js', array( 'chartjs', 'jquery' ), IPQUERY_VERSION, true );
+		wp_enqueue_style( 'sva-admin', SVA_URL . 'assets/css/admin.css', array(), SVA_VERSION );
+		wp_enqueue_script( 'sva-maps', SVA_URL . 'assets/js/sva-maps.js', array( 'leaflet', 'leaflet-heat', 'jquery' ), SVA_VERSION, true );
+		wp_enqueue_script( 'sva-charts', SVA_URL . 'assets/js/sva-charts.js', array( 'chartjs', 'jquery' ), SVA_VERSION, true );
 
 		wp_localize_script(
-			'ipquery-maps',
-			'IpQueryData',
+			'sva-maps',
+			'SvaData',
 			array(
 				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'ipquery_ajax' ),
-				'heatmapAction' => 'ipquery_heatmap_data',
-				'chartAction'   => 'ipquery_chart_data',
+				'nonce'         => wp_create_nonce( 'sva_ajax' ),
+				'heatmapAction' => 'sva_heatmap_data',
+				'chartAction'   => 'sva_chart_data',
 			)
 		);
 	}
@@ -129,7 +129,7 @@ class IpQuery_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
-		include IPQUERY_DIR . 'admin/views/dashboard.php';
+		include SVA_DIR . 'admin/views/dashboard.php';
 	}
 
 	/**
@@ -141,7 +141,7 @@ class IpQuery_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
-		include IPQUERY_DIR . 'admin/views/visitors.php';
+		include SVA_DIR . 'admin/views/visitors.php';
 	}
 
 	/**
@@ -153,7 +153,7 @@ class IpQuery_Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
-		include IPQUERY_DIR . 'admin/views/settings.php';
+		include SVA_DIR . 'admin/views/settings.php';
 	}
 
 	// -------------------------------------------------------------------------
@@ -167,8 +167,8 @@ class IpQuery_Admin {
 	 */
 	public static function handle_settings_save(): void {
 		if (
-			! isset( $_POST['ipquery_settings_nonce'] ) ||
-			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ipquery_settings_nonce'] ) ), 'ipquery_save_settings' )
+			! isset( $_POST['sva_settings_nonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['sva_settings_nonce'] ) ), 'sva_save_settings' )
 		) {
 			return;
 		}
@@ -206,15 +206,15 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function handle_delete_ip(): void {
-		check_admin_referer( 'ipquery_delete_ip' );
+		check_admin_referer( 'sva_delete_ip' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
 		$ip = sanitize_text_field( wp_unslash( $_POST['ip'] ?? '' ) );
 		if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			IpQuery_DB::delete_ip( $ip );
+			SVA_DB::delete_ip( $ip );
 		}
-		wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&deleted=1' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors&deleted=1' ) );
 		exit;
 	}
 
@@ -224,7 +224,7 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function handle_delete_by_country(): void {
-		check_admin_referer( 'ipquery_delete_by_country' );
+		check_admin_referer( 'sva_delete_by_country' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
@@ -234,20 +234,20 @@ class IpQuery_Admin {
 		);
 
 		if ( empty( $country_code ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors' ) );
 			exit;
 		}
 
-		$deleted = IpQuery_DB::delete_by_country( $country_code );
+		$deleted = SVA_DB::delete_by_country( $country_code );
 
 		if ( false === $deleted ) {
 			wp_safe_redirect(
-				admin_url( 'admin.php?page=ipquery-visitors&country_delete_error=1' )
+				admin_url( 'admin.php?page=sva-visitors&country_delete_error=1' )
 			);
 			exit;
 		}
 
-		IpQuery_DB::log_action(
+		SVA_DB::log_action(
 			sprintf(
 				'Admin "%s" deleted %d visitor record(s) for country: %s',
 				wp_get_current_user()->user_login,
@@ -260,7 +260,7 @@ class IpQuery_Admin {
 
 		wp_safe_redirect(
 			admin_url(
-				'admin.php?page=ipquery-visitors'
+				'admin.php?page=sva-visitors'
 				. '&country_deleted=' . $deleted_param
 				. '&country_code=' . rawurlencode( $country_code )
 			)
@@ -274,13 +274,13 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function handle_purge(): void {
-		check_admin_referer( 'ipquery_purge' );
+		check_admin_referer( 'sva_purge' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
 		$days    = max( 1, (int) sanitize_text_field( wp_unslash( $_POST['days'] ?? '90' ) ) );
-		$deleted = IpQuery_DB::delete_old_records( $days );
-		wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&purged=' . $deleted ) );
+		$deleted = SVA_DB::delete_old_records( $days );
+		wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors&purged=' . $deleted ) );
 		exit;
 	}
 
@@ -290,13 +290,13 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function handle_manual_lookup(): void {
-		check_admin_referer( 'ipquery_manual_lookup' );
+		check_admin_referer( 'sva_manual_lookup' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
 		$ip = sanitize_text_field( wp_unslash( $_POST['ip'] ?? '' ) );
 		if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&lookup_error=invalid' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors&lookup_error=invalid' ) );
 			exit;
 		}
 
@@ -323,10 +323,10 @@ class IpQuery_Admin {
 				'is_datacenter' => (int) ( $response->risk?->isDatacenter ?? 0 ),
 				'risk_score'    => $response->risk?->riskScore ?? 0,
 			);
-			IpQuery_DB::upsert( $row );
-			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&lookup_ok=1' ) );
+			SVA_DB::upsert( $row );
+			wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors&lookup_ok=1' ) );
 		} catch ( IpQueryException $e ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=ipquery-visitors&lookup_error=' . rawurlencode( $e->getMessage() ) ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=sva-visitors&lookup_error=' . rawurlencode( $e->getMessage() ) ) );
 		}
 		exit;
 	}
@@ -337,7 +337,7 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function handle_export_csv(): void {
-		check_admin_referer( 'ipquery_export_csv' );
+		check_admin_referer( 'sva_export_csv' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Not allowed.', 'stracini-visitor-analytics' ) );
 		}
@@ -345,13 +345,13 @@ class IpQuery_Admin {
 		$search      = sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) );
 		$risk_filter = sanitize_text_field( wp_unslash( $_POST['risk_filter'] ?? '' ) );
 
-		$rows     = IpQuery_DB::get_all_for_export(
+		$rows     = SVA_DB::get_all_for_export(
 			array(
 				'search'      => $search,
 				'risk_filter' => $risk_filter,
 			)
 		);
-		$filename = 'ipquery-visitors-' . gmdate( 'Y-m-d' ) . '.csv';
+		$filename = 'sva-visitors-' . gmdate( 'Y-m-d' ) . '.csv';
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
@@ -433,13 +433,13 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function ajax_chart_data(): void {
-		check_ajax_referer( 'ipquery_ajax', 'nonce' );
+		check_ajax_referer( 'sva_ajax', 'nonce' );
 		$data = array(
-			'countries' => IpQuery_DB::get_top_countries( 15 ),
-			'risk'      => IpQuery_DB::get_risk_counts(),
+			'countries' => SVA_DB::get_top_countries( 15 ),
+			'risk'      => SVA_DB::get_risk_counts(),
 			'totals'    => array(
-				'visits'     => IpQuery_DB::get_total_visits(),
-				'unique_ips' => IpQuery_DB::get_unique_ips(),
+				'visits'     => SVA_DB::get_total_visits(),
+				'unique_ips' => SVA_DB::get_unique_ips(),
 			),
 		);
 		wp_send_json_success( $data );
@@ -451,8 +451,8 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function ajax_heatmap_data(): void {
-		check_ajax_referer( 'ipquery_ajax', 'nonce' );
-		$points = IpQuery_DB::get_coordinates_for_heatmap( 500 );
+		check_ajax_referer( 'sva_ajax', 'nonce' );
+		$points = SVA_DB::get_coordinates_for_heatmap( 500 );
 		wp_send_json_success( $points );
 	}
 
@@ -462,8 +462,8 @@ class IpQuery_Admin {
 	 * @return void
 	 */
 	public static function run_cleanup(): void {
-		$settings = get_option( 'ipquery_settings', array() );
+		$settings = get_option( 'sva_settings', array() );
 		$days     = (int) ( $settings['retention_days'] ?? 90 );
-		IpQuery_DB::delete_old_records( $days );
+		SVA_DB::delete_old_records( $days );
 	}
 }

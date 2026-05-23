@@ -1,4 +1,4 @@
-/* IpQuery WP – Chart.js charts */
+/* SVA – Chart.js charts */
 (function ($) {
     'use strict';
 
@@ -11,7 +11,7 @@
     ];
 
     function buildCountryChart(data) {
-        var el = document.getElementById('ipquery-country-chart');
+        var el = document.getElementById('sva-country-chart');
         if (!el || !data || !data.length) return;
 
         var labels     = data.map(function (r) { return r.country || r.country_code || 'Unknown'; });
@@ -57,7 +57,7 @@
     }
 
     function buildRiskChart(risk) {
-        var el = document.getElementById('ipquery-risk-chart');
+        var el = document.getElementById('sva-risk-chart');
         if (!el || !risk) return;
 
         var labels = ['VPN', 'Proxy', 'Tor', 'Datacenter', 'Mobile'];
@@ -97,11 +97,11 @@
 
     function loadCharts() {
         $.ajax({
-            url: IpQueryData.ajaxUrl,
+            url: SvaData.ajaxUrl,
             method: 'POST',
             data: {
-                action: IpQueryData.chartAction,
-                nonce: IpQueryData.nonce
+                action: SvaData.chartAction,
+                nonce: SvaData.nonce
             },
             success: function (res) {
                 if (!res.success || !res.data) return;

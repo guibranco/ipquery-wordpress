@@ -35,7 +35,7 @@ No Composer or external package manager is needed. The [ipquery-php](https://git
    git clone https://github.com/guibranco/ipquery-wordpress.git
    ```
 2. Copy the `ipquery-wordpress` folder into your `wp-content/plugins/` directory.
-3. In your WordPress admin, go to **Plugins** and activate **IpQuery**.
+3. In your WordPress admin, go to **Plugins** and activate **Stracini Visitor Analytics with IpQuery**.
 
 ---
 
@@ -65,6 +65,6 @@ Uninstalling the plugin permanently deletes all collected visitor data.
 
 ## After activation
 
-Once active, the plugin immediately starts tracking visitors (based on your [settings]({% link configuration.md %})). Navigate to **IpQuery → Dashboard** in the WordPress admin sidebar to see the interface.
+Once active, the plugin immediately starts tracking visitors (based on your [settings]({% link configuration.md %})). Navigate to **Visitor Analytics → Dashboard** in the WordPress admin sidebar to see the interface.
 
 [Configure the plugin →]({% link configuration.md %}){: .btn .btn-primary }

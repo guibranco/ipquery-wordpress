@@ -2,12 +2,12 @@
 /**
  * Settings admin view.
  *
- * @package IpQuery
+ * @package SVA
  */
 
 defined( 'ABSPATH' ) || exit; ?>
 
-<div class="wrap ipquery-wrap">
+<div class="wrap sva-wrap">
 	<h1 class="wp-heading-inline">
 		<span class="dashicons dashicons-admin-settings"></span>
 		<?php esc_html_e( 'Visitor Analytics — Settings', 'stracini-visitor-analytics' ); ?>
@@ -15,8 +15,8 @@ defined( 'ABSPATH' ) || exit; ?>
 	<hr class="wp-header-end">
 
 	<?php
-	$ipquery_raw      = get_option( 'ipquery_settings', array() );
-	$ipquery_defaults = array(
+	$sva_raw      = get_option( 'sva_settings', array() );
+	$sva_defaults = array(
 		'tracking_enabled'   => true,
 		'track_logged_in'    => false,
 		'track_admins'       => false,
@@ -24,11 +24,11 @@ defined( 'ABSPATH' ) || exit; ?>
 		'retention_days'     => 90,
 		'lookup_private_ips' => false,
 	);
-	$ipquery_settings = wp_parse_args( $ipquery_raw, $ipquery_defaults );
+	$sva_settings = wp_parse_args( $sva_raw, $sva_defaults );
 	?>
 
 	<form method="post" action="">
-		<?php wp_nonce_field( 'ipquery_save_settings', 'ipquery_settings_nonce' ); ?>
+		<?php wp_nonce_field( 'sva_save_settings', 'sva_settings_nonce' ); ?>
 
 		<table class="form-table" role="presentation">
 
@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<th scope="row"><?php esc_html_e( 'Enable Tracking', 'stracini-visitor-analytics' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="tracking_enabled" value="1" <?php checked( $ipquery_settings['tracking_enabled'] ); ?>>
+						<input type="checkbox" name="tracking_enabled" value="1" <?php checked( $sva_settings['tracking_enabled'] ); ?>>
 						<?php esc_html_e( 'Track visitor IPs on every page load', 'stracini-visitor-analytics' ); ?>
 					</label>
 					<p class="description"><?php esc_html_e( 'Disable to pause all tracking without deactivating the plugin.', 'stracini-visitor-analytics' ); ?></p>
@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<th scope="row"><?php esc_html_e( 'Track Logged-in Users', 'stracini-visitor-analytics' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="track_logged_in" value="1" <?php checked( $ipquery_settings['track_logged_in'] ); ?>>
+						<input type="checkbox" name="track_logged_in" value="1" <?php checked( $sva_settings['track_logged_in'] ); ?>>
 						<?php esc_html_e( 'Also track visitors who are logged in to WordPress', 'stracini-visitor-analytics' ); ?>
 					</label>
 				</td>
@@ -57,7 +57,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<th scope="row"><?php esc_html_e( 'Track Administrators', 'stracini-visitor-analytics' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="track_admins" value="1" <?php checked( $ipquery_settings['track_admins'] ); ?>>
+						<input type="checkbox" name="track_admins" value="1" <?php checked( $sva_settings['track_admins'] ); ?>>
 						<?php esc_html_e( 'Track users with the manage_options capability', 'stracini-visitor-analytics' ); ?>
 					</label>
 				</td>
@@ -67,7 +67,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<th scope="row"><?php esc_html_e( 'Look Up Private IPs', 'stracini-visitor-analytics' ); ?></th>
 				<td>
 					<label>
-						<input type="checkbox" name="lookup_private_ips" value="1" <?php checked( $ipquery_settings['lookup_private_ips'] ); ?>>
+						<input type="checkbox" name="lookup_private_ips" value="1" <?php checked( $sva_settings['lookup_private_ips'] ); ?>>
 						<?php esc_html_e( 'Send private/LAN IPs to the IpQuery API (useful for testing on localhost)', 'stracini-visitor-analytics' ); ?>
 					</label>
 				</td>
@@ -78,7 +78,7 @@ defined( 'ABSPATH' ) || exit; ?>
 					<label for="excluded_ips"><?php esc_html_e( 'Excluded IPs', 'stracini-visitor-analytics' ); ?></label>
 				</th>
 				<td>
-					<textarea id="excluded_ips" name="excluded_ips" rows="6" class="large-text code"><?php echo esc_textarea( $ipquery_settings['excluded_ips'] ); ?></textarea>
+					<textarea id="excluded_ips" name="excluded_ips" rows="6" class="large-text code"><?php echo esc_textarea( $sva_settings['excluded_ips'] ); ?></textarea>
 					<p class="description"><?php esc_html_e( 'One IP per line. These IPs will never be tracked.', 'stracini-visitor-analytics' ); ?></p>
 				</td>
 			</tr>
@@ -89,7 +89,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				</th>
 				<td>
 					<input type="number" id="retention_days" name="retention_days"
-							value="<?php echo esc_attr( (int) $ipquery_settings['retention_days'] ); ?>"
+							value="<?php echo esc_attr( (int) $sva_settings['retention_days'] ); ?>"
 							min="1" max="3650" class="small-text">
 					<?php esc_html_e( 'days', 'stracini-visitor-analytics' ); ?>
 					<p class="description"><?php esc_html_e( 'Visitor records older than this are deleted by the daily cleanup cron.', 'stracini-visitor-analytics' ); ?></p>
@@ -103,7 +103,7 @@ defined( 'ABSPATH' ) || exit; ?>
 
 	<!-- About / API info -->
 	<hr>
-	<div class="ipquery-panel" style="margin-top:16px;">
+	<div class="sva-panel" style="margin-top:16px;">
 		<h3><?php esc_html_e( 'About IpQuery for WordPress', 'stracini-visitor-analytics' ); ?></h3>
 		<p>
 			<?php esc_html_e( 'This plugin uses the free IpQuery API (', 'stracini-visitor-analytics' ); ?>
@@ -136,9 +136,9 @@ defined( 'ABSPATH' ) || exit; ?>
 					<td><?php esc_html_e( 'PHP ≥ 8.2', 'stracini-visitor-analytics' ); ?></td>
 					<td>
 						<?php if ( version_compare( PHP_VERSION, '8.2', '>=' ) ) : ?>
-							<span class="ipquery-badge ipquery-badge--green">✔ <?php echo esc_html( PHP_VERSION ); ?></span>
+							<span class="sva-badge sva-badge--green">✔ <?php echo esc_html( PHP_VERSION ); ?></span>
 						<?php else : ?>
-							<span class="ipquery-badge ipquery-badge--red">✘ <?php echo esc_html( PHP_VERSION ); ?></span>
+							<span class="sva-badge sva-badge--red">✘ <?php echo esc_html( PHP_VERSION ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -146,26 +146,26 @@ defined( 'ABSPATH' ) || exit; ?>
 					<td><?php esc_html_e( 'cURL extension', 'stracini-visitor-analytics' ); ?></td>
 					<td>
 						<?php if ( extension_loaded( 'curl' ) ) : ?>
-							<span class="ipquery-badge ipquery-badge--green">✔ <?php esc_html_e( 'Enabled', 'stracini-visitor-analytics' ); ?></span>
+							<span class="sva-badge sva-badge--green">✔ <?php esc_html_e( 'Enabled', 'stracini-visitor-analytics' ); ?></span>
 						<?php else : ?>
-							<span class="ipquery-badge ipquery-badge--red">✘ <?php esc_html_e( 'Missing', 'stracini-visitor-analytics' ); ?></span>
+							<span class="sva-badge sva-badge--red">✘ <?php esc_html_e( 'Missing', 'stracini-visitor-analytics' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?php esc_html_e( 'WP Cron (cleanup)', 'stracini-visitor-analytics' ); ?></td>
 					<td>
-						<?php $ipquery_next = wp_next_scheduled( 'ipquery_daily_cleanup' ); ?>
-						<?php if ( $ipquery_next ) : ?>
-							<span class="ipquery-badge ipquery-badge--green">✔ <?php echo esc_html( wp_date( 'Y-m-d H:i', $ipquery_next ) ); ?></span>
+						<?php $sva_next = wp_next_scheduled( 'sva_daily_cleanup' ); ?>
+						<?php if ( $sva_next ) : ?>
+							<span class="sva-badge sva-badge--green">✔ <?php echo esc_html( wp_date( 'Y-m-d H:i', $sva_next ) ); ?></span>
 						<?php else : ?>
-							<span class="ipquery-badge ipquery-badge--orange"><?php esc_html_e( 'Not scheduled', 'stracini-visitor-analytics' ); ?></span>
+							<span class="sva-badge sva-badge--orange"><?php esc_html_e( 'Not scheduled', 'stracini-visitor-analytics' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
 					<td><?php esc_html_e( 'DB version', 'stracini-visitor-analytics' ); ?></td>
-					<td><?php echo esc_html( get_option( 'ipquery_db_version', '—' ) ); ?></td>
+					<td><?php echo esc_html( get_option( 'sva_db_version', '—' ) ); ?></td>
 				</tr>
 			</tbody>
 		</table>

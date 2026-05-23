@@ -71,12 +71,12 @@ jobs:
 
       - name: Stage plugin under its slug directory
         run: |
-          mkdir -p /tmp/ipquery
-          git archive HEAD | tar -x -C /tmp/ipquery
+          mkdir -p /tmp/stracini-visitor-analytics
+          git archive HEAD | tar -x -C /tmp/stracini-visitor-analytics
 
       - name: Run WordPress Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wp-version: 'latest'
-          build-dir: /tmp/ipquery
+          build-dir: /tmp/stracini-visitor-analytics
