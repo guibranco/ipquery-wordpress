@@ -1,14 +1,14 @@
-/* IpQuery WP – Leaflet heatmap */
+/* SVA – Leaflet heatmap */
 (function ($) {
     'use strict';
 
     var map, heatLayer;
 
     function initMap() {
-        var el = document.getElementById('ipquery-map');
+        var el = document.getElementById('sva-map');
         if (!el) return;
 
-        map = L.map('ipquery-map', { scrollWheelZoom: false }).setView([20, 0], 2);
+        map = L.map('sva-map', { scrollWheelZoom: false }).setView([20, 0], 2);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -24,11 +24,11 @@
 
     function loadHeatmap() {
         $.ajax({
-            url: IpQueryData.ajaxUrl,
+            url: SvaData.ajaxUrl,
             method: 'POST',
             data: {
-                action: IpQueryData.heatmapAction,
-                nonce: IpQueryData.nonce
+                action: SvaData.heatmapAction,
+                nonce: SvaData.nonce
             },
             success: function (res) {
                 if (!res.success || !res.data || !res.data.length) return;

@@ -117,15 +117,15 @@ jobs:
         env:
           VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
-          sed -i "s/^ \* Version:.*/ * Version:           ${VERSION}/" ipquery.php
-          sed -i "s/define( 'IPQUERY_VERSION',[^)]*)/define( 'IPQUERY_VERSION', '${VERSION}' )/" ipquery.php
+          sed -i "s/^ \* Version:.*/ * Version:           ${VERSION}/" stracini-visitor-analytics.php
+          sed -i "s/define( 'SVA_VERSION',[^)]*)/define( 'SVA_VERSION', '${VERSION}' )/" stracini-visitor-analytics.php
           sed -i "s/^Stable tag:.*/Stable tag: ${VERSION}/" readme.txt
 
       - name: Commit version bump, tag, and push
         env:
           VERSION: ${{ needs.version.outputs.fullSemVer }}
         run: |
-          git add ipquery.php readme.txt
+          git add stracini-visitor-analytics.php readme.txt
           # Commit only when the version files actually changed.
           git diff --cached --quiet \
             || git commit -m "chore: bump version to ${VERSION} [skip ci]"
