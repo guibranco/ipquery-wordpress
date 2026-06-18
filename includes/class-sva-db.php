@@ -393,10 +393,11 @@ class SVA_DB {
 
 		$sql = "SELECT * FROM {$table} {$where_sql} ORDER BY {$orderby} {$order}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		$prepared = $values
-			? $wpdb->prepare( $sql, ...$values ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			: $wpdb->prepare( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$rows = $wpdb->get_results( $prepared, ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( $values ) {
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql, ...$values ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		} else {
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		}
 
 		return is_array( $rows ) ? $rows : array();
 	}
