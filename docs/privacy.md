@@ -63,7 +63,7 @@ You should reference `ipquery.io` in your privacy policy as a sub-processor if y
 
 ## Data storage
 
-All collected data is stored in the `wp_ipquery_visitors` table in your own WordPress database. No data is sent to any service other than the IpQuery API lookup described above, and the results of that lookup are stored only on your server.
+All collected data is stored in the `wp_sva_visitors` table in your own WordPress database. No data is sent to any service other than the IpQuery API lookup described above, and the results of that lookup are stored only on your server.
 
 ---
 
@@ -97,19 +97,19 @@ The plugin does not currently register itself with the WordPress core privacy to
 ```php
 // Find all records for an IP
 global $wpdb;
-$table = $wpdb->prefix . 'ipquery_visitors';
+$table = $wpdb->prefix . 'sva_visitors';
 $rows  = $wpdb->get_results(
     $wpdb->prepare( "SELECT * FROM {$table} WHERE ip = %s", $user_ip )
 );
 
 // Delete records for an IP
-IpQuery_DB::delete_ip( $user_ip );
+SVA_DB::delete_ip( $user_ip );
 
 // Delete all records for a country (ISO alpha-2 code)
-IpQuery_DB::delete_by_country( 'DE' );
+SVA_DB::delete_by_country( 'DE' );
 
 // Delete records for multiple countries at once
-IpQuery_DB::delete_by_countries( [ 'DE', 'FR', 'IT' ] );
+SVA_DB::delete_by_countries( [ 'DE', 'FR', 'IT' ] );
 ```
 
 Support for native WordPress privacy tools (data export and per-user erasure requests via the admin UI) is planned for a future release.
