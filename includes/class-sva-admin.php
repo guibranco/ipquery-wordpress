@@ -87,7 +87,7 @@ class SVA_Admin {
 	 * @return void
 	 */
 	public static function enqueue_assets( string $hook ): void {
-		if ( ! str_contains( $hook, 'stracini-visitor-analytics' ) ) {
+		if ( ! str_contains( $hook, 'sva-' ) ) {
 			return;
 		}
 
