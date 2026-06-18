@@ -27,3 +27,4 @@ Thumbs.db
 
 # WordPress plugin check
 _build/*
+.claude

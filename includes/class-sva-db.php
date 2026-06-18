@@ -393,11 +393,14 @@ class SVA_DB {
 
 		$sql = "SELECT * FROM {$table} {$where_sql} ORDER BY {$orderby} {$order}"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
+		// $table is from $wpdb->prefix (trusted). $orderby/$order are allow-list validated above.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 		if ( $values ) {
-			$rows = $wpdb->get_results( $wpdb->prepare( $sql, ...$values ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql, ...$values ), ARRAY_A );
 		} else {
-			$rows = $wpdb->get_results( $wpdb->prepare( $sql ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$rows = $wpdb->get_results( $wpdb->prepare( $sql ), ARRAY_A );
 		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		return is_array( $rows ) ? $rows : array();
 	}
