@@ -177,7 +177,7 @@ class SVA_Admin {
 		}
 
 		update_option(
-			'ipquery_settings',
+			'sva_settings',
 			array(
 				'tracking_enabled'   => ! empty( $_POST['tracking_enabled'] ),
 				'track_logged_in'    => ! empty( $_POST['track_logged_in'] ),
