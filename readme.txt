@@ -4,7 +4,7 @@ Tags: ip, geolocation, analytics, security, heatmap
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
