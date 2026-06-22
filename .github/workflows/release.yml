@@ -22,7 +22,7 @@ jobs:
       fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
     needs: version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -75,7 +75,7 @@ jobs:
     needs: version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Stage plugin under its slug directory
         env:
@@ -101,7 +101,7 @@ jobs:
     needs: [version, test, plugin-check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           # Use a PAT with workflow scope so the version-bump push can be made.
